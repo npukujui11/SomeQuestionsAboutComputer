@@ -42,6 +42,12 @@
 		- 
 
 	+ VAE和AE的差距[<sup>[8]</sup>](#refer-anchor-8)在于
+		- AE的特点是数据相关的(data-specific)，这意味者自动编码器只能压缩那些与训练数据类似的数据，其是一类数据对应一种编码器，无法拓展一种编码器去应用于另一类数据。
+
+		- 自动编码器是有损的，即解压缩的输出于原来的输入相比是退化的，MP3，JPEG等压缩算法也是如此。
+
+		- VAE倾向于数据生成(data-generation)。只要训练好了decoder，我们就可以从某一个标准正态分布（一个区间）生成数据作为解码器decoder的输入，来生成类似的、但不完全相同于训练数据的新数据，也许是我们从类见过的新数据，作用类似于GAN。
+
 		- 二者虽然都是$\mathcal{X}\rightarrow\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$，但是AE寻找的是单值映射关系，即$z=f(x)$。
 		
 		- 而VAE寻找的是分布的映射关系，即$\mathcal{X}\rightarrow\mathcal{Z}$.
