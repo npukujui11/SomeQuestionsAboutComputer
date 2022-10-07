@@ -15,7 +15,7 @@
 		
 		-  解码消息的空间$\mathcal{X}$；编码信息的空间$\mathcal{Z}$。其中$\mathcal{X}$和$\mathcal{Z}$是欧几里得空间。其中$\mathcal{X} = \mathbb{R}^m, \mathcal{Z} =  \mathbb{R}^n$，其中$m, n$表示维数。
 
-		- 两个参数化的函数：编码器(encoder)：$E_\phi:\mathcal{X}_\theta\rightarrow\mathcal{Z}$，参数为$\phi$；解码器(decoder)：$D_:\mathcal{Z}\rightarrow\mathcal{X}$，参数为$\theta$；
+		- 两个参数化的函数：编码器(encoder)：$E_\phi:\mathcal{X}_\theta\rightarrow\mathcal{Z}$，参数为$\phi$；解码器(decoder)：$D_\theta:\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$，参数为$\theta$；
 
 		- ${\forall}x\in\mathcal{X}$写作$z=E_\phi(x)$，其中$z$称为潜在变量(the latent variable)。对于${\forall}z\in\mathcal{Z}$写作$x^{\prime}=D_\theta(z)$，一般称之为消息(message)
 
