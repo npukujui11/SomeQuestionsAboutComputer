@@ -7,15 +7,32 @@
 
 * **概率混合模型**：概率混合模型可以简单的理解为有多个（甚至是无数个）独立概率模型的凸组合(Convex Combination)，由于概率混合模型使用多个独立的概率分布，它可以描述一个复杂的数据分布，无论数据分布的结构如何复杂，总可以通过增加成分的方式来描述数据分布的局部特性，因此概率混合模型成为最有效的密度工具以及最常用的聚类工具之一。
 
-* **变分自编码器**[<sup>1</sup>](#refer-anchor-1)： (Variation Auto-Encoders, VAE)是一种基于变分贝叶斯推断的生成式网络，它通过潜在随机变量（Latent Random Variables）来实现样本的生成，从而有更好的鲁棒性。 
-	+ 传统的自编码器模型主要由两部分构成：编码器(encoder)和解码器（decoder）。
+* **变分自编码器**[<sup>[1]</sup>](#refer-anchor-1)： (Variation Auto-Encoders, VAE)是一种基于变分贝叶斯推断的生成式网络，它通过潜在随机变量（Latent Random Variables）来实现样本的生成，从而有更好的鲁棒性。
+	+ 传统的自编码器模型是一种人工神经网络，用于学习未标记数据的有效编码（无监督学习）[<sup>[2]</sup>](#refer-anchor-2)。其两个主要应用是降维和信息检索[<sup>[3]</sup>](#refer-anchor-3)。其主要由两部分构成：编码器(encoder)和解码器（decoder）。
+		
 		- 如下图所示	<div><div align=center><img src="picture/自编码模型.png" alt="No Picture" style="zoom:100%"/><center><p>传统的自编码模型</p></center></div></div>
-		-  输入数据$X$通过模型被转化为一个编码向量$X‘$，其中$X'$的每个维度表示一些学到的关于数据的特征，而X’在每个维度上的取值代表X在该特征上的表现。
-		- 解码器网络接受$X‘$的这些值并尝试重构原始输入。
+		
+		-  解码消息的空间$\mathcal{X}$；编码信息的空间$\mathcal{Z}$。其中$\mathcal{X}$和$\mathcal{Z}$是欧几里得空间。其中$\mathcal{X} = \mathbb{R}^m, \mathcal{Z} =  \mathbb{R}^n$，其中$m, n$表示维数。
+
+		- 两个参数化的函数：编码器(encoder)：$E_\phi:\mathcal{X}_\theta\rightarrow\mathcal{Z}$，参数为$\phi$；解码器(decoder)：$D_:\mathcal{Z}\rightarrow\mathcal{X}$，参数为$\theta$；
+
+		- ${\forall}x\in\mathcal{X}$写作$z=E_\phi(x)$，其中$z$称为潜在变量(the latent variable)。对于${\forall}z\in\mathcal{Z}$写作$x^{\prime}=D_\theta(z)$，一般称之为消息(message)
+
+		- 通常，编码器和解码器都被定义为多层感知器[<sup>[4]</sup>](#refer-anchor-4)(Multilayer Perceptrons)。例如，一层MLP编码器$E_\phi$是$$E_\phi = \sigma(\mathcal{W}x+b)$$，其中$\sigma$是激活函数，$\mathcal{W}$是一个称为"权重(weight)"的矩阵，并且b是一个称为"偏差(bias)"的向量。
+
+
 	+ 变分自编码器构造依据的原理，具体结构如下
-		- 如下图所示，与自动编码器由编码器与解码器两部分构成相似，VAE利用两个神经网络建立两个概率密度分布模型：一个用于原始输入数据的变分推断，生成隐变量的变分概率分布，称为推断网络；另一个根据生成的隐变量变分概率分布，还原生成原始数据的近似概率分布，称为生成网络。
-		- div><div align=center><img src="picture/自编码模型.png" alt="No Picture" style="zoom:100%"/><center><p>传统的自编码模型</p></center></div></div>
+		- 如下图所示，与自动编码器由编码器与解码器两部分构成相似，VAE利用两个神经网络建立两个概率密度分布模型：一个用于原始输入数据的变分推断，生成隐变量的变分概率分布，称为**推断网络**；另一个根据生成的隐变量变分概率分布，还原生成原始数据的近似概率分布，称为**生成网络**。
+		- <div><div align=center><img src="picture/变分自编码器模型.png" alt="No Picture" style="zoom:100%"/><center><p>变分自编码器结构</p></center></div></div>
+		- 假设原始数据集为$$X = \{{x_i}\}_{i=1}^N$$
+		- 每个数据样本$x_i$都是随机产生的相互独立、连续或离散的分布变量，生成的数据集合为$$X^{\prime} = \{{x_i}^{\prime}\}_{i=1}^N$$
 	
+		- 并且假设该过程产生隐变量$Z$，即$Z$是决定$X$属性的神秘原因(特征)。其中可观测变量$X$是一个高维空间的随机向量，不可观测变量$Z$是一个相对低维空间的随机向量，该生成模型可以分成两个过程：
+			+ （1）隐变量$Z$后验分布的近似推断过程：$$q_{\phi}(z|x)$$，即推断网络。
+			+ （2）生成变量$X^{\prime}$的条件分布生成过程：$$P_{\phi}(z)P_{\theta}(x^{\prime}|z)$$，即生成网络。
+		- VAE的“编码器”和“解码器”的输出都是受参数约束变量的概率密度分布，而不是某种特定的编码。
+		- 
+
 ## 前人工作成就总结
 
 ### 前人工作
@@ -80,8 +97,8 @@
 * 其中$n=1,…,N$是KPI时间序列个数；
 * T是$x_n$的持续时间；
 * $x_{t,n}$是在时间T的观测值；
-* $x_{t,n}∈R^V$, $V$表示KPI的个数；
-* $x_n∈R^{T×V}$。
+* $x_{t,n}∈\mathbb{R}^V$, $V$表示KPI的个数；
+* $x_n∈\mathbb{R}^{T×V}$。
 
 **多元CDN KPI的异常检测问题**被定义为确定某一网站在某一时间，$x_{t,n}$的观察结果是否异常的问题。
 
@@ -135,4 +152,24 @@
 ## Reference
 <div id="refer-anchor-1"></div>
 
-- [1] Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." arXiv preprint arXiv:1312.6114 (2013).
+- [1] Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." arXiv preprint arXiv:1312.6114 (2013).`
+
+<div id="refer-anchor-2"></div>
+
+- [2] Kramer M A. Nonlinear principal component analysis using autoassociative neural networks[J]. AIChE journal, 1991, 37(2): 233-243.
+
+<div id="refer-anchor-3"></div>
+
+- [3] Goodfellow I, Bengio Y, Courville A. Deep learning[M]. MIT press, 2016.
+
+<div id="refer-anchor-4"></div>
+
+- [4] Hastie, Trevor, et al. The elements of statistical learning: data mining, inference, and prediction. Vol. 2. New York: springer, 2009.
+
+<div id="refer-anchor-5"></div>
+
+- [5] [Least squares optimization](https://people.duke.edu/~ccc14/sta-663-2018/notebooks/S09F_Least_Squares_Optimization.html#Least-squares-optimization)
+
+<div id="refer-anchor-6"></div>
+
+- [6] Grisetti G, Guadagnino T, Aloise I, et al. Least squares optimization: From theory to practice[J]. Robotics, 2020, 9(3): 51.
