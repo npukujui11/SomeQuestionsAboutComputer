@@ -26,9 +26,6 @@
 
 		- 质量函数是L2损失：${\displaystyle d(x,x')=\|x-x^{\prime}\|_{2}^{2}}$。故寻找最优自编码器的问题是**最小二乘优化**[<sup>[5]</sup>](#refer-anchor-5) [<sup>[6]</sup>](#refer-anchor-6)：$${\displaystyle \min _{\theta ,\phi }L(\theta ,\phi ),{\text{where }}L(\theta ,\phi)={\frac {1}{N}}\sum _{i=1}^{N}\|x_{i}-D_{\theta }(E_{\phi }(x_{i}))\|_{2}^{2}}$$
 
-		通过模型被转化为一个编码向量$X^{\prime}$，其中$X^{\prime}$的每个维度表示一些学到的关于数据的特征，而X’在每个维度上的取值代表X在该特征上的表现。
-		- 解码器网络接受$X^{\prime}$的这些值并尝试重构原始输入。
-
 	+ 变分自编码器构造依据的原理，具体结构如下
 		- 如下图所示，与自动编码器由编码器与解码器两部分构成相似，VAE利用两个神经网络建立两个概率密度分布模型：一个用于原始输入数据的变分推断，生成隐变量的变分概率分布，称为**推断网络**；另一个根据生成的隐变量变分概率分布，还原生成原始数据的近似概率分布，称为**生成网络**。
 		- <div><div align=center><img src="picture/变分自编码器模型.png" alt="No Picture" style="zoom:100%"/><center><p>变分自编码器结构</p></center></div></div>
