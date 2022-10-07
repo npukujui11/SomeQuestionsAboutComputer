@@ -20,6 +20,14 @@
 
 		- 通常，编码器和解码器都被定义为多层感知器[<sup>[4]</sup>](#refer-anchor-4)(Multilayer Perceptrons)。例如，一层MLP编码器$E_\phi$是$$E_\phi = \sigma(\mathcal{W}x+b)$$，其中$\sigma$是激活函数，$\mathcal{W}$是一个称为"权重(weight)"的矩阵，并且b是一个称为"偏差(bias)"的向量。
 
+	+ 自动编码器的训练[<sup>[3]</sup>](#refer-anchor-3)。通过一个task去衡量模型的质量。设参考概率分布$\mu_{ref}$，对于$\forall{x}\in\mathcal{X}, x\sim\mu_{ref}$，因此可以把损失函数(loss function)定义为$${\displaystyle L(\theta ,\phi ) :=\mathbb{\mathbb {E} } _{x\sim\mu_{ref}}[d(x,D_{\theta}(E_{\phi}(X)))]}$$，对于给定任务的最佳自动编码器${\displaystyle (\mu _{ref},d)}$，其最优参数通过下式求解，$${\displaystyle \arg \min _{\theta ,\phi }L(\theta ,\phi )}$$
+
+		- 对于最优自动编码器的搜索可以通过任何数学优化技术来完成，但是通常通过**梯度下降**。在大多数情况下参考概率分布为，$${\displaystyle \mu _{ref}={\frac {1}{N}}\sum _{i=1}^{N}\delta _{x_{i}}}$$
+
+		- 质量函数是L2损失：${\displaystyle d(x,x')=\|x-x^{\prime}\|_{2}^{2}}$。故寻找最优自编码器的问题是**最小二乘优化**[<sup>[5]</sup>](#refer-anchor-5) [<sup>[6]</sup>](#refer-anchor-6)：$${\displaystyle \min _{\theta ,\phi }L(\theta ,\phi ),{\text{where }}L(\theta ,\phi)={\frac {1}{N}}\sum _{i=1}^{N}\|x_{i}-D_{\theta }(E_{\phi }(x_{i}))\|_{2}^{2}}$$
+
+		通过模型被转化为一个编码向量$X^{\prime}$，其中$X^{\prime}$的每个维度表示一些学到的关于数据的特征，而X’在每个维度上的取值代表X在该特征上的表现。
+		- 解码器网络接受$X^{\prime}$的这些值并尝试重构原始输入。
 
 	+ 变分自编码器构造依据的原理，具体结构如下
 		- 如下图所示，与自动编码器由编码器与解码器两部分构成相似，VAE利用两个神经网络建立两个概率密度分布模型：一个用于原始输入数据的变分推断，生成隐变量的变分概率分布，称为**推断网络**；另一个根据生成的隐变量变分概率分布，还原生成原始数据的近似概率分布，称为**生成网络**。
