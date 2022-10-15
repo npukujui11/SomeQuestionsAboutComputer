@@ -11,7 +11,7 @@
 
 	+ 传统的**自编码器模型**是一种人工神经网络，用于学习未标记数据的有效编码（无监督学习）[<sup>[2]</sup>](#refer-anchor-2)。其两个主要应用是降维和信息检索[<sup>[3]</sup>](#refer-anchor-3)。其主要由两部分构成：编码器(encoder)和解码器（decoder）。
 		
-		- 如下图所示	<div><div align=center><img src="picture/自编码模型.png" alt="No Picture" style="zoom:100%"/><center><p>传统的自编码模型</p></center></div></div>
+		- 如下图所示	<div><div align=center><img src="picture/自编码模型.png" alt="No Picture" style="zoom:50%"/><center><p>传统的自编码模型</p></center></div></div>
 		
 		-  解码消息的空间$\mathcal{X}$；编码信息的空间$\mathcal{Z}$。其中$\mathcal{X}$和$\mathcal{Z}$是欧几里得空间。其中$\mathcal{X} = \mathbb{R}^m, \mathcal{Z} =  \mathbb{R}^n$，其中$m, n$表示维数。
 
@@ -27,19 +27,44 @@
 
 		- 质量函数是L2损失[<sup>[7]</sup>](#refer-anchor-7)：${\displaystyle d(x,x')=\|x-x^{\prime}\|_{2}^{2}}$。故寻找最优自编码器的问题是**最小二乘优化**[<sup>[5]</sup>](#refer-anchor-5) [<sup>[6]</sup>](#refer-anchor-6)：$${\displaystyle \min _{\theta ,\phi }L(\theta ,\phi ),{\text{where }}L(\theta ,\phi)={\frac {1}{N}}\sum _{i=1}^{N}\|x_{i}-D_{\theta }(E_{\phi }(x_{i}))\|_{2}^{2}}$$
 
-	+ 变分自编码器构造依据的原理，具体结构如下
+	+ 变分自编码器构造依据的原理[<sup>[1]</sup>](#refer-anchor-1)，具体结构如下
 		- 如下图所示，与自动编码器由编码器与解码器两部分构成相似，VAE利用两个神经网络建立两个概率密度分布模型：一个用于原始输入数据的变分推断，生成隐变量的变分概率分布，称为**推断网络**；另一个根据生成的隐变量变分概率分布，还原生成原始数据的近似概率分布，称为**生成网络**。
+		
 		- <div><div align=center><img src="picture/变分自编码器模型.png" alt="No Picture" style="zoom:100%"/><center><p>变分自编码器结构</p></center></div></div>
-		- 假设原始数据集为$$X = \{{x_i}\}_{i=1}^N$$
-		- 每个数据样本$x_i$都是随机产生的相互独立、连续或离散的分布变量，生成的数据集合为$$X^{\prime} = \{{x_i}^{\prime}\}_{i=1}^N$$
+		
+		- 假设原始数据集为$$X = \{{x^{(i)}}\}_{i=1}^N$$
+		
+		- 每个数据样本$x_i$都是随机产生的相互独立、连续或离散的分布变量，生成的数据集合为$$\widetilde{X} = \{{\widetilde{x}^{(i)}}\}_{i=1}^N$$
 	
-		- 并且假设该过程产生隐变量$Z$，即$Z$是决定$X$属性的神秘原因(特征)。其中可观测变量$X$是一个高维空间的随机向量，不可观测变量$Z$是一个相对低维空间的随机向量，该生成模型可以分成两个过程：
+		- 并且假设该过程产生隐变量$Z$，即$Z$是决定$X$属性的神秘原因(特征)。其中可观测变量$X$是一个高维空间的随机向量，不可观测变量$Z$是一个相对低维空间的随机向量，那样本生成的过程分为两步：1）从先验分布$p_{\theta^{*}}(z)$中随机采样生成$z^{(i)}$；2）从条件概率分布$p_{\theta^{*}}(x|z)$中采样生成$x^{(i)}$。但是这个过程在我们看来是隐藏的；真正的参数$\theta^{*}$以及潜在变量$z^{(i)}$的值对于我们来说是未知的。但作者并未对$p_\theta(z)$进行建模，而是使用$q_{\phi}(z|x)$。该生成模型可以分成两个过程：
+
+			+ <div><div align=center><img src="picture/VAE模型简化图.png" alt="No Picture" style="zoom:100%"/><center><p>VAE简化模型</p></center></div></div>
+		
 			+ （1）隐变量$Z$后验分布的近似推断过程：$$q_{\phi}(z|x)$$，即推断网络。
+
 			+ （2）生成变量$X^{\prime}$的条件分布生成过程：$$P_{\phi}(z)P_{\theta}(x^{\prime}|z)$$，即生成网络。
+			
+		- 变分自动编码器
+			
+			+ 变分自动编码器的推断网络输出的推断网络输出的应该是$Z$后验分布$p(z|x)$。但是这个$p(z|x)$后验分布本身是不好求的。因此Kingma等[<sup>[1]</sup>](#refer-anchor-1)提出了一种方法，利用另一个可伸缩的分布$q_{\phi}(z|x)$来近似$p(z|x)$。通过深度学习网络来学习$q_{\phi}(z|x)$中的参数$\phi$，一步步优化使其与$p(z|x)$十分相似，就可以用它来对复杂的分布进行近似的推理。
+
+			+ 为了使得两个分布尽可能的相似，我们可以最小化两个分布之间的KL散度[<sup>[13]</sup>](#refer-anchor-13)(主要用于衡量两个分布之间的差距)，KL散度的定义[<sup>[14]</sup>](#refer-anchor-14)如下，$$\mathrm{KL}(p(x)||q(x)) = \sum_{x\in X}[p(x)\ln \frac{p(x)}{q(x)}] = \mathbb{E} _{x\sim p(x)}[\ln \frac{p(x)}{q(x)}]$$因此衡量目标为$$\min \mathrm {KL}(q_\phi(z|x)||p_\theta(z|x))$$，KL散度为$${\displaystyle {\begin{aligned} \mathrm {KL}(q_{\phi }({z|x})\parallel p_{\theta }({z|x}))&=\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {q_{\phi }(z|x)}{p_{\theta }(z|x)}}\right]\\&=\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {q_{\phi }({z|x})p_{\theta }(x)}{p_{\theta }(x,z)}}\right]\\&=\ln p_{\theta }(x)+\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {q_{\phi }({z|x})}{p_{\theta }(x,z)}}\right]\end{aligned}}}$$
 		
-		- VAE的“编码器”和“解码器”的输出都是受参数约束变量的概率密度分布，而不是某种特定的编码。
-		
-		- 
+			+ 从上式可知，要最小化KL散度，因为$p_\phi(x)$是定值，即$\ln p_\phi(x)$亦是一个定值，所以要使得$$\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {q_{\phi }({z|x})}{p_{\theta }(x,z)}}\right]$$最小，即使得$$\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_\theta(x, z)}{q_\phi(z|x)}}\right]$$最大
+
+			+ 现定义证据下限(ELBO)：$${\displaystyle L_{\theta ,\phi }(x):=\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z)}{q_{\phi }({z|x})}}\right]=\ln p_{\theta }(x)-\mathrm{KL}(q_{\phi }({\cdot |x})\parallel p_{\theta }({\cdot |x}))}$$
+
+			+ 最大化ELBO$${\displaystyle \theta ^{*},\phi ^{*}={\underset {\theta ,\phi }{\operatorname {argmax} }}\,L_{\theta ,\phi }(x)}$$
+
+			+ 相当于同时最大化$\ln p_\theta(x)$并最小化${\displaystyle \mathrm{KL}(q_{\phi }({z|x})\parallel p_{\theta }({z|x}))}$. 即最大化观测数据的对数似然，最小化近似后验$q_\phi(\cdot|x)$到明确后验$p_\theta(\cdot|x)$的散度。$${\displaystyle {\begin{aligned} \mathrm {KL}(q_{\phi }({\cdot|x})\parallel p_{\theta }({\cdot|x}))&=\sum_z {q_\phi(z|x) \ln \frac {q_\phi(z|x)}{p_\theta(z|x)}}\\&=\int q_\phi(z|x) \ln{\frac{q_\phi(z|x)}{p_\theta(z|x)}}\,dz \\&=\int q_\phi(z|x) \ln{q_\phi(z|x)}\,dz-\int p_\theta(z|x) \ln{p_\theta(z|x)}\,dz  \\&=\int \mathcal{N}(z;\mu, \sigma^2)\ln\mathcal{N}(z;\mu,\sigma^2)\,dz + \int \mathcal{N}(z;\mu, \sigma^2)\ln\mathcal{N}(z;0,1)\,dz  \\&=\mathbb{E}_{z \sim \mathcal{N}(\mu,\sigma^2)}\left[\ln \mathcal{N}(z;\mu,\sigma^2)\right]-\mathbb{E}_{z \sim \mathcal{N}(\mu,\sigma^2)}\left[\ln \mathcal{N}(z;0,1)\right]\\&=\mathbb{E}_{z \sim \mathcal{N}(\mu,\sigma^2)}\left[\ln (\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(z-\mu)^2}{2\sigma^2}})\right]-\mathbb{E}_{z \sim \mathcal{N}(\mu,\sigma^2)}\left[\ln(\frac{1}{\sqrt{2\pi}}e^{-\frac{z^2}{2}})\right]\\&=\frac{1}{2}(\sigma+\mu^2-\ln\sigma^2-1) \end{aligned}}}$$
+
+		- 重新参数化(Reparameterization)
+
+			+ 利用梯度下降方法，高效率搜索$${\displaystyle \theta ^{*},\phi ^{*}={\underset {\theta ,\phi }{\operatorname {argmax} }}\,L_{\theta ,\phi }(x)}$$，对于$${\displaystyle \nabla _{\theta }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]=\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\nabla _{ \theta }\ln {\frac {p_{\theta }(x,z)}{q_{\phi }({z|x})}}\right]}$$，其结果很容易求解。
+
+			+ 然而，对于$${\displaystyle \nabla _{\phi }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]}$$不能把${\displaystyle \nabla _{\phi }}$放到期望中，因为$\phi$出现在概率分布本身中。随机反向传播[<sup>[15]</sup>](#refer-anchor-15)解决了这个问题[<sup>[1]</sup>](#refer-anchor-1)[<sup>[16]</sup>](#refer-anchor-16)[<sup>[17]</sup>](#refer-anchor-17)。我们可以从从单位高斯采样
+
+
 
 	+ VAE和AE的差距[<sup>[8]</sup>](#refer-anchor-8)在于
 		- AE的特点是数据相关的(data-specific)，这意味者自动编码器只能压缩那些与训练数据类似的数据，其是一类数据对应一种编码器，无法拓展一种编码器去应用于另一类数据。
@@ -47,6 +72,8 @@
 		- 自动编码器是有损的，即解压缩的输出于原来的输入相比是退化的，MP3，JPEG等压缩算法也是如此。
 
 		- VAE倾向于数据生成(data-generation)。只要训练好了decoder，我们就可以从某一个标准正态分布（一个区间）生成数据作为解码器decoder的输入，来生成类似的、但不完全相同于训练数据的新数据，也许是我们从类见过的新数据，作用类似于GAN。
+
+		- VAE的“编码器”和“解码器”的输出都是受参数约束变量的概率密度分布，而不是某种特定的编码。
 
 		- 二者虽然都是$\mathcal{X}\rightarrow\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$，但是AE寻找的是单值映射关系，即$z=f(x)$。
 		
@@ -220,3 +247,23 @@
 <div id="refer-anchor-12"></div>
 
 - [12] Jang, E. "A beginner’s guide to variational methods: Mean-field approximation." (2016).
+
+<div id="refer-anchor-13"></div>
+
+- [13] Joyce, James M. "Kullback-leibler divergence." International encyclopedia of statistical science. Springer, Berlin, Heidelberg, 2011. 720-722.
+
+<div id="refer-anchor-14"></div>
+
+- [14] Malinin, Andrey, and Mark Gales. "Reverse kl-divergence training of prior networks: Improved uncertainty and adversarial robustness." Advances in Neural Information Processing Systems 32 (2019).
+
+<div id="refer-anchor-15"></div>
+
+- [15] Rezende, Danilo Jimenez, Shakir Mohamed, and Daan Wierstra. "Stochastic backpropagation and approximate inference in deep generative models." International conference on machine learning. PMLR, 2014.
+
+<div id="refer-anchor-16"></div>
+
+- [16] Bengio, Yoshua, Aaron Courville, and Pascal Vincent. "Representation learning: A review and new perspectives." IEEE transactions on pattern analysis and machine intelligence 35.8 (2013): 1798-1828.
+
+<div id="refer-anchor-17"></div>
+
+- [17] Kingma, Durk P., et al. "Semi-supervised learning with deep generative models." Advances in neural information processing systems 27 (2014).
