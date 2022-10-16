@@ -88,7 +88,9 @@
 
 		- 二者虽然都是$\mathcal{X}\rightarrow\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$，但是AE寻找的是单值映射关系，即$z=f(x)$，而VAE寻找的是分布的映射关系，即$\mathcal{X}\rightarrow\mathcal{Z}$.
 			
-			- 为什么会有这区别呢？[<sup>[9]</sup>](#refer-anchor-9)AE的decoder做的是$\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$变换，那么理论上它可以作为生成器使用。但这里有个问题，显然不是所有的$\mathbb{R}^{n}$都是有效的$\mathcal{Z}$。$\mathcal{Z}$的边界在哪里？如何得到有效的$\mathcal{Z}$，从而生成$\mathcal{x}$？这些都不是AE可以解决的，为了解决这个局限性，VAE映射的是分布，而分布可以通过采样得到有效的得到$\mathcal{z}$，从而生成相应的$\mathcal{x^{\prime}}$。
+			+ 为什么会有这区别呢？[<sup>[9]</sup>](#refer-anchor-9)AE的decoder做的是$\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$变换，那么理论上它可以作为生成器使用。但这里有个问题，显然不是所有的$\mathbb{R}^{n}$都是有效的$\mathcal{Z}$。$\mathcal{Z}$的边界在哪里？如何得到有效的$\mathcal{Z}$，从而生成$\mathcal{x}$？这些都不是AE可以解决的，为了解决这个局限性，VAE映射的是分布，而分布可以通过采样得到有效的得到$\mathcal{z}$，从而生成相应的$\mathcal{x^{\prime}}$。
+
+		- VAE模型可能存在过度正则化的潜在空间，即后验坍塌(posterior collapse)，可能是由于在潜在空间上假设了过度简化的先验（各向同向高斯）。Yuri Burda等[<sup>[18]</sup>](#refer-anchor-18)提出了一种重要性加权自动编码器（IWAE），并证明了IWAE比VAE学习更丰富的潜在空间表示，从而改善了密度估计基准测试对数似然。QT Truong等[<sup>[19]</sup>](#refer-anchor-19)提出了通过引入约束自适应先验(CAP)来学习依赖于用户和项目的先验分布来缓解这个问题。
 
 		- 变分自编码器通常与自编码器模型相关联，因为它具有架构亲和力，但是在目标和数学公式方面存在显著差异。变分自动编码器允许将统计推断问题（例如从另一个随机变量推断一个随机变量的值）重写为统计优化问题（即找到某些目标函数最小化的参数值）[<sup>[10]</sup>](#refer-anchor-10)[<sup>[11]</sup>](#refer-anchor-11)[<sup>[12]</sup>](#refer-anchor-12)。
 
@@ -276,3 +278,11 @@
 <div id="refer-anchor-17"></div>
 
 - [17] Kingma, Durk P., et al. "Semi-supervised learning with deep generative models." Advances in neural information processing systems 27 (2014).
+
+<div id="refer-anchor-18"></div>
+
+- [18] Burda, Yuri, Roger Grosse, and Ruslan Salakhutdinov. "Importance weighted autoencoders." arXiv preprint arXiv:1509.00519 (2015).
+
+<div id="refer-anchor-19"></div>
+
+- [19] Truong, Quoc-Tuan, Aghiles Salah, and Hady W. Lauw. "Bilateral variational autoencoder for collaborative filtering." Proceedings of the 14th ACM International Conference on Web Search and Data Mining. 2021.
