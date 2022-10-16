@@ -63,8 +63,8 @@
 			+ 利用梯度下降方法，高效率搜索$${\displaystyle \theta ^{*},\phi ^{*}={\underset {\theta ,\phi }{\operatorname {argmax} }}\,L_{\theta ,\phi }(x)}$$，对于$${\displaystyle \nabla _{\theta }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]=\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\nabla _{ \theta }\ln {\frac {p_{\theta }(x,z)}{q_{\phi }({z|x})}}\right]}$$，其结果很容易求解。
 
 			+ 然而，对于$${\displaystyle \nabla _{\phi }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]}$$不能把${\displaystyle \nabla _{\phi }}$放到期望中，因为$\phi$出现在概率分布本身中，故其不可导，因此无法返回梯度信息。重新参数化技巧，亦称随机反向传播[<sup>[15]</sup>](#refer-anchor-15)解决了这个问题[<sup>[1]</sup>](#refer-anchor-1)[<sup>[16]</sup>](#refer-anchor-16)[<sup>[17]</sup>](#refer-anchor-17)。重参数化技巧可以求导的本质在于解耦了网络计算和采样操作，其方法主要包含两类：
-				- 连续分布采样：使用高斯分布采样经过仿射变换的重参数化方法；
-				- 离散分布采样：使用Gumbel-Softmax的重参数方法。
+				- 连续分布采样：Durk P. Kingma等[<sup>[21]</sup>](#refer-anchor-21)使用高斯分布采样经过仿射变换的重参数化方法；
+				- 离散分布采样：Eric Jang等[<sup>[20]</sup>](#refer-anchor-20)提出Gumbel-Softmax估计器，其在结构化输出预测和具有分类潜在变量的无监督生成建模任务上优于最先进的梯度估计器。
 				
 				如下图所示，这里是$z \sim q_{\phi}(z|x) \sim \mathcal{N} (\mu_{\phi}(x), \sigma_{\phi}^2(x))$连续分布采样，我们可以从单位高斯采样$\varepsilon \sim \mathcal N(0, I)$，然后通过潜在分布的均值$\mu$改变随机采样的$\varepsilon$，最后通过潜在分布的方差$\sigma$对其进行缩放。因此构造$z=\mu_\phi(x)+\sigma_\phi(x)\varepsilon$
 
@@ -286,3 +286,11 @@
 <div id="refer-anchor-19"></div>
 
 - [19] Truong, Quoc-Tuan, Aghiles Salah, and Hady W. Lauw. "Bilateral variational autoencoder for collaborative filtering." Proceedings of the 14th ACM International Conference on Web Search and Data Mining. 2021.
+
+<div id="refer-anchor-20"></div>
+
+- [20] Jang, Eric, Shixiang Gu, and Ben Poole. "Categorical reparameterization with gumbel-softmax." arXiv preprint arXiv:1611.01144 (2016).
+
+<div id="refer-anchor-21"></div>
+
+- [21] Kingma, Durk P., Tim Salimans, and Max Welling. "Variational dropout and the local reparameterization trick." Advances in neural information processing systems 28 (2015).
