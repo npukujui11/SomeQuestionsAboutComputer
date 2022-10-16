@@ -98,10 +98,13 @@
 
 ### 前人工作
 
+
 一些无监督方法，利用循环神经网络RNN进行时间序列特征提取，用于多变量时间序列异常检测等等。
 
+* **深度学习异常检测方法**在网络KPI异常检测中，考虑到异常或异常值的行为通常不同于正常数据。基于这一理念，人们提出了大量新颖的无监督方法，主要是利用循环神经网络(RNN)进行时间序列特征提取，用于多变量时间序列异常检测。**<font color=red>当前的深度异常检测模型无法有效处理问题一和问题二**</font>
+
 ### 存在的问题
-* **问题一**：单个网站在不同时间段的非平稳依赖（The non-stationary dependencies）会降低深度异常检测模型的性能:：
+* **问题一**：单个网站在不同时间段的非平稳依赖（The Non-stationary Dependencies）会降低深度异常检测模型的性能:：
 
 	+ 由于用户的正常行为或CDN的调度等，相应的KPI通常表现出非平稳的时间特征，不应将其归类为服务失败或退化。但是，这些类型的预期模式很难被目前的方法捕获，这会使得目前的模型在CDN KPI异常检测方面的表现性能很差。
 	
@@ -294,3 +297,19 @@
 <div id="refer-anchor-21"></div>
 
 - [21] Kingma, Durk P., Tim Salimans, and Max Welling. "Variational dropout and the local reparameterization trick." Advances in neural information processing systems 28 (2015).
+
+<div id="refer-anchor-22"></div>
+
+- [22] Zhang, Chuxu, et al. "A deep neural network for unsupervised anomaly detection and diagnosis in multivariate time series data." Proceedings of the AAAI conference on artificial intelligence. Vol. 33. No. 01. 2019.
+
+<div id="refer-anchor-23"></div>
+
+- [23] Su, Ya, et al. "Robust anomaly detection for multivariate time series through stochastic recurrent neural network." Proceedings of the 25th ACM SIGKDD international conference on knowledge discovery & data mining. 2019.
+
+<div id="refer-anchor-24"></div>
+
+- [24] Dai, Liang, et al. "SDFVAE: Static and dynamic factorized vae for anomaly detection of multivariate cdn kpis." Proceedings of the Web Conference 2021. 2021.
+
+<div id="refer-anchor-25"></div>
+
+- [25] Zong, Bo, et al. "Deep autoencoding gaussian mixture model for unsupervised anomaly detection." International conference on learning representations. 2018.
