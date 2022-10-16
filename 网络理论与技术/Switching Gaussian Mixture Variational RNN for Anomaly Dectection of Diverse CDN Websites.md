@@ -5,7 +5,8 @@
 
 * **CDN**：Content Delivery Network，内容分发网络是建立并覆盖在承载网之上，由分布在不同区域的边缘节点服务器群组成的分布式网络。CDN应用广泛，支持多种行业、多种场景内容加速，例如：图片小文件、大文件下载、视音频点播、直播流媒体、全站加速、安全加速。CDN运营商通常会收集每个网站的各种KPI，如流量、延迟、命中率等，并对这些多变量KPI进行异常检测，以检测业务故障或降级。
 
-* **概率混合模型**：概率混合模型可以简单的理解为有多个（甚至是无数个）独立概率模型的凸组合(Convex Combination)，由于概率混合模型使用多个独立的概率分布，它可以描述一个复杂的数据分布，无论数据分布的结构如何复杂，总可以通过增加成分的方式来描述数据分布的局部特性，因此概率混合模型成为最有效的密度工具以及最常用的聚类工具之一。
+* **概率混合模型**[<sup>[26]</sup>](#refer-anchor-26) [<sup>[27]</sup>](#refer-anchor-27)
+[<sup>[28]</sup>](#refer-anchor-28)：概率混合模型可以简单的理解为有多个（甚至是无数个）独立概率模型的凸组合(Convex Combination)，由于概率混合模型使用多个独立的概率分布，它可以描述一个复杂的数据分布，无论数据分布的结构如何复杂，总可以通过增加成分的方式来描述数据分布的局部特性，因此概率混合模型成为最有效的密度工具以及最常用的聚类工具之一。
 
 * **变分自编码器**[<sup>[1]</sup>](#refer-anchor-1)： (Variation Auto-Encoders, VAE)是一种基于变分贝叶斯推断的生成式网络，它通过潜在随机变量（Latent Random Variables）来实现样本的生成，从而有更好的鲁棒性。
 
@@ -327,3 +328,16 @@
 <div id="refer-anchor-25"></div>
 
 - [25] Zong, Bo, et al. "Deep autoencoding gaussian mixture model for unsupervised anomaly detection." International conference on learning representations. 2018.
+
+<div id="refer-anchor-26"></div>
+
+- [26] Yan, Heng-Chao, Jun-Hong Zhou, and Chee Khiang Pang. "Gaussian mixture model using semisupervised learning for probabilistic fault diagnosis under new data categories." IEEE Transactions on Instrumentation and Measurement 66.4 (2017): 723-733.
+
+<div id="refer-anchor-27"></div>
+
+- [27] Honda, Katsuhiro, and Hidetomo Ichihashi. "Regularized linear fuzzy clustering and probabilistic PCA mixture models." IEEE Transactions on Fuzzy Systems 13.4 (2005): 508-516.
+
+<div id="refer-anchor-28"></div>
+
+- [28] Chen, Wenchao, et al. "Tensor RNN with Bayesian nonparametric mixture for radar HRRP modeling and target recognition." IEEE Transactions on Signal Processing 69 (2021): 1995-2009.
+
