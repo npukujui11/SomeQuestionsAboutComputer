@@ -86,9 +86,7 @@
 
 		- VAE的“编码器”和“解码器”的输出都是受参数约束变量的概率密度分布，而不是某种特定的编码。
 
-		- 二者虽然都是$\mathcal{X}\rightarrow\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$，但是AE寻找的是单值映射关系，即$z=f(x)$。
-		
-		- 而VAE寻找的是分布的映射关系，即$\mathcal{X}\rightarrow\mathcal{Z}$.
+		- 二者虽然都是$\mathcal{X}\rightarrow\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$，但是AE寻找的是单值映射关系，即$z=f(x)$，而VAE寻找的是分布的映射关系，即$\mathcal{X}\rightarrow\mathcal{Z}$.
 		
 		- 为什么会有这区别呢？[<sup>[9]</sup>](#refer-anchor-9)AE的decoder做的是$\mathcal{Z}\rightarrow\mathcal{X^{\prime}}$变换，那么理论上它可以作为生成器使用。但这里有个问题，显然不是所有的$\mathbb{R}^{n}$都是有效的$\mathcal{Z}$。$\mathcal{Z}$的边界在哪里？如何得到有效的$\mathcal{Z}$，从而生成$\mathcal{x}$？这些都不是AE可以解决的，为了解决这个局限性，VAE映射的是分布，而分布可以通过采样得到有效的得到$\mathcal{z}$，从而生成相应的$\mathcal{x^{\prime}}$。
 
