@@ -62,8 +62,19 @@
 
 			+ 利用梯度下降方法，高效率搜索$${\displaystyle \theta ^{*},\phi ^{*}={\underset {\theta ,\phi }{\operatorname {argmax} }}\,L_{\theta ,\phi }(x)}$$，对于$${\displaystyle \nabla _{\theta }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]=\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\nabla _{ \theta }\ln {\frac {p_{\theta }(x,z)}{q_{\phi }({z|x})}}\right]}$$，其结果很容易求解。
 
-			+ 然而，对于$${\displaystyle \nabla _{\phi }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]}$$不能把${\displaystyle \nabla _{\phi }}$放到期望中，因为$\phi$出现在概率分布本身中。随机反向传播[<sup>[15]</sup>](#refer-anchor-15)解决了这个问题[<sup>[1]</sup>](#refer-anchor-1)[<sup>[16]</sup>](#refer-anchor-16)[<sup>[17]</sup>](#refer-anchor-17)。我们可以从从单位高斯采样
+			+ 然而，对于$${\displaystyle \nabla _{\phi }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z )}{q_{\phi }({z|x})}}\right]}$$不能把${\displaystyle \nabla _{\phi }}$放到期望中，因为$\phi$出现在概率分布本身中，故其不可导，因此无法返回梯度信息。重新参数化技巧，亦称随机反向传播[<sup>[15]</sup>](#refer-anchor-15)解决了这个问题[<sup>[1]</sup>](#refer-anchor-1)[<sup>[16]</sup>](#refer-anchor-16)[<sup>[17]</sup>](#refer-anchor-17)。重参数化技巧可以求导的本质在于解耦了网络计算和采样操作，其方法主要包含两类：
+				- 连续分布采样：使用高斯分布采样经过仿射变换的重参数化方法；
+				- 离散分布采样：使用Gumbel-Softmax的重参数方法。
+				
+				如下图所示，这里是$z \sim q_{\phi}(z|x) \sim \mathcal{N} (\mu_{\phi}(x), \sigma_{\phi}^2(x))$连续分布采样，我们可以从单位高斯采样$\varepsilon \sim \mathcal N(0, I)$，然后通过潜在分布的均值$\mu$改变随机采样的$\varepsilon$，最后通过潜在分布的方差$\sigma$对其进行缩放。因此构造$z=\mu_\phi(x)+\sigma_\phi(x)\varepsilon$
 
+				+ <div><div align=center><img src="picture/重参数化技巧.png" alt="No Picture" style="zoom:100%"/><center><p>重参数化技巧</p></center></div></div>
+
+			+ 此时编码器可以从$\varepsilon \sim \mathcal{N}(0,I)$中进行采样，并且不受参数$\phi$的影响，因此可以将下式作为目标函数$${\displaystyle \nabla _{\phi }\mathbb {E} _{z\sim q_{\phi }(\cdot |x)}\left[\ln {\frac {p_{\theta }(x,z)}{q_{\phi }({z|x})}}\right]=\mathbb {E} _{\epsilon \sim \mathcal {N}(0, I) }\left[\nabla _{\phi }\ln {\frac {p_{\theta }(x,\mu _{\phi }(x)+\sigma_{\phi }(x)\epsilon )}{q_{\phi }(\mu _{\phi }(x)+\sigma_{\phi }(x)\epsilon |x)}}\right]}$$上式是可微的，并且能对参数$\phi$和$\theta$进行随机梯度下降.
+
+			+ 由于我们重新参数化$z$，我们需要找到$q_\phi(z|x)$. $${\begin{aligned} \ln{q_\phi(z|x)} &= \ln{\mathcal{N}(\mu_\phi(x),\sigma_{\phi}^2}(x)) \\&= \ln \frac{1}{\sqrt{2\pi} \ \sigma_\phi(x)} \ \exp{- \frac{(z-\mu_\phi(x))^2}{2\sigma_\phi^2(x)}} \\&=  - \frac{(z-\mu_\phi(x))^2}{2\sigma_\phi^2(x)} - \frac{1}{2}  \ln 2\pi - \ln \sigma_\phi(x) \\&= - \frac{1}{2}\varepsilon^2- \frac{1}{2}\ln 2 \pi- \ln \sigma_\phi(x)        \end{aligned}}$$
+
+		+ 综上所述VAE的流程可简化为下图<div><div align=center><img src="picture/VAE流程图.png" alt="No Picture" style="zoom:100%"/><center><p>VAE单次整个流程</p></center></div></div>
 
 
 	+ VAE和AE的差距[<sup>[8]</sup>](#refer-anchor-8)在于
