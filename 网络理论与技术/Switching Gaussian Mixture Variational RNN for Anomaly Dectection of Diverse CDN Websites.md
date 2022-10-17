@@ -5,17 +5,21 @@
 
 * **CDN**：Content Delivery Network，内容分发网络是建立并覆盖在承载网之上，由分布在不同区域的边缘节点服务器群组成的分布式网络。CDN应用广泛，支持多种行业、多种场景内容加速，例如：图片小文件、大文件下载、视音频点播、直播流媒体、全站加速、安全加速。CDN运营商通常会收集每个网站的各种KPI，如流量、延迟、命中率等，并对这些多变量KPI进行异常检测，以检测业务故障或降级。
 
-* **概率混合模型**：概率混合模型可以简单的理解为有多个（甚至是无数个）独立概率模型的凸组合(Convex Combination)，由于概率混合模型使用多个独立的概率分布，它可以描述一个复杂的数据分布，无论数据分布的结构如何复杂，总可以通过增加成分的方式来描述数据分布的局部特性，因此概率混合模型成为最有效的密度工具以及最常用的聚类工具之一。**概率混合模型的本质就是概率分布函数的卷积(convolution)。**
+* **概率混合模型**[<sup>[38]</sup>](#refer-anchor-38)：概率混合模型可以简单的理解为有多个（甚至是无数个）独立概率模型的凸组合(Convex Combination)，由于概率混合模型使用多个独立的概率分布，它可以描述一个复杂的数据分布，无论数据分布的结构如何复杂，总可以通过增加成分的方式来描述数据分布的局部特性，因此概率混合模型成为最有效的密度工具以及最常用的聚类工具之一。**概率混合模型的本质就是概率分布函数的卷积(convolution)。** 广义上的混合概率模型具有如下一般表达形式$$f(x)=\sum_{k=1}^K w_k f_k(x)$$, $f(\cdot)$表示一个具有$K$个独立成分的混合模型，其中$f_k(\cdot)$表示第k个成分，$w_k$则表示第k个成分的权重。下列是概率混合模型的分类和其最常见的一些模型，以及它们的一些应用。
 
-	+ **高斯混合模型(GMM)**[<sup>[29]</sup>](#refer-anchor-29)：如果一个变量的取值是多个高斯分布联合产生的，如何进行参数估计呢？如果对于多个高斯分布联合产生的数据，使用单个高斯分布去拟合的化，可以想象拟合结果会很差。 GMM模型就是对由多个高斯分布线性拟合后产生的数据进行参数估计的模型。模型的概率密度函数为：$$f(x)=\sum_{i}^k \phi_{i}\frac{1}{\sqrt{2\pi}\sigma_i}e^{-\frac{(x-\mu)^2}{2\sigma_i^2}}$$我们可以通过EM算法估计参数值$\phi_i,  \  \mu_i,  \ \sigma_i,\ i\in[1,\ k] $
+	+ 有限概率混合模型：有限概率混合模型是较高层面的一个定义，它可以覆盖大多数最常用的混合模型，比如属于指数家族[<sup>[31]</sup>](#refer-anchor-31)(Exponential Family)的高斯（正态）混合模型[<sup>[32]</sup>](#refer-anchor-32)、多项式混合模型[<sup>[33]</sup>](#refer-anchor-33)、伽马混合模型[<sup>[34]</sup>](#refer-anchor-34)等，以及混合朴素贝叶斯模型[<sup>[35]</sup>](#refer-anchor-35)、混合马尔可夫模型[<sup>[36]</sup>](#refer-anchor-36)等
+		- **高斯混合模型(GMM)**[<sup>[29]</sup>](#refer-anchor-29)：如果一个变量的取值是多个高斯分布联合产生的，如何进行参数估计呢？如果对于多个高斯分布联合产生的数据，使用单个高斯分布去拟合的化，可以想象拟合结果会很差。 GMM模型就是对由多个高斯分布线性拟合后产生的数据进行参数估计的模型。模型的概率密度函数为：$$f(x)=\sum_{i}^k \phi_{i}\frac{1}{\sqrt{2\pi}\sigma_i}e^{-\frac{(x-\mu)^2}{2\sigma_i^2}}$$我们可以通过EM算法[<sup>[37]</sup>](#refer-anchor-37)（期望最大化算法，Expectation-Maximization Algorithm）估计参数值$\phi_i,  \  \mu_i,  \ \sigma_i,\ i\in[1,\ k] $
 
-		+ **GMM聚类**：可以依据观察值来自的具体高斯分布将其进行聚类，其实就是对于每个观察值求解$P(T=i|x), \ i\in[1, \ k]$.求解方式如下：$${\begin{aligned} P(T=i|x)&=\frac{P(T=i)P(x|T=i)}{P(x)} \\&= \frac{\phi_i \mathcal{N}(x|\mu_i, \ \sigma_i^2) \Delta{x}}{f(x)\Delta{x}} \\&=  \frac{\phi_i \mathcal{N}(x|\mu_i, \ \sigma_i^2)}{\sum_j^k\phi_j\mathcal{N}(x|\mu_j, \ \sigma_j^2)} \end{aligned}}$$ 
+			+ **GMM聚类**：可以依据观察值来自的具体高斯分布将其进行聚类，其实就是对于每个观察值求解$P(T=i|x), \ i\in[1, \ k]$.求解方式如下：$${\begin{aligned} P(T=i|x)&=\frac{P(T=i)P(x|T=i)}{P(x)} \\&= \frac{\phi_i \mathcal{N}(x|\mu_i, \ \sigma_i^2) \Delta{x}}{f(x)\Delta{x}} \\&=  \frac{\phi_i \mathcal{N}(x|\mu_i, \ \sigma_i^2)}{\sum_j^k\phi_j\mathcal{N}(x|\mu_j, \ \sigma_j^2)} \end{aligned}}$$ 
 
 		+ **概率主成分分析(PPCA)**[<sup>[30]</sup>](#refer-anchor-30) ：被认为是一种有约束的高斯混合模型(GMMs)，在建模数据量较小的高维数据时，其密度估计的灵活性优于全协方差矩阵的GMMs。
 
 			+ 假设由一个由N个数据点组成的数据集$\mathbf X = \mathbf x_{n}$，其中每个数据点均为$D$维，$\mathbf x_n \in \mathbb R^{D}$。目标是使用较低维度$K \in D$，在隐变量$\mathbf z_n \in \mathbb R^K$下表示每个$\mathbf x_n$。主轴集合$\mathbf W$将隐变量与该数据相关联。
 
 			+ 具体来说，我们假定每个隐变量为正态分布，$$\mathbf z_n \sim N(0, \mathbf I).$$通过投影，生成相应的数据点，$$\mathbf x_n | \mathbf z_n \sim N(\mathbf W \mathbf z_n, \sigma^2 \mathbf I), $$其中，矩阵$\mathbf W \in \mathbb R^{D \times K}$称为主轴。在概率PCA概括了经典PCA。对隐变量进行边缘化处理后，每个数据点的分布为$$\mathbf x_n \sim N(0, \mathbf {W} \mathbf {W^{\mathbf T}} + \sigma^2 \mathbf I).$$当噪声的协方差变得无穷小$(\sigma^2 \rightarrow 0)$时，经典PCA就是概率PCA的特例。
+
+	+ 非参数概率混合模型：有限概率混合模型的一个局限性就是在进行模型估计之前需要人工指定成分个数$K$，但是，在某些应用中，我们甚至连$K$的大致取值范围都无法给定。这时，我们就希望有一种概率混合模型具有不确定的成分个数并可以根据需要动态增加，甚至可以趋向于无穷大——这就是非参数（Nonparametric）混合模型。非参数表示模型无法参数化
+	
 	+ Yan等[<sup>[26]</sup>](#refer-anchor-26) 提出了一种新的概率诊断框架，用于对新数据类别进行有效检测出。模式识别采用高斯混合模型(GMM)，其训练过程从传统的无监督学习改进为新型半监督学习。该方法客服了传统诊断方法的局限性，即从训练中将新类型的错误故障分类到现有类别中。
 
 	+ Honda等[<sup>[27]</sup>](#refer-anchor-27)讨论了Local PCA与线性模糊聚类之间的关系，作者提出了一种新的聚类技术，即一种新的线性模糊聚类算法，可以灵活地捕捉局部线性结构。作者建议将概率PCA混合模型应用于线性聚类。
@@ -362,3 +366,35 @@
 <div id="refer-anchor-30"></div>
 
 - [30] Tipping, Michael E., and Christopher M. Bishop. "Mixtures of probabilistic principal component analyzers." Neural computation 11.2 (1999): 443-482.
+
+<div id="refer-anchor-31"></div>
+
+- [31] Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006.
+
+<div id="refer-anchor-32"></div>
+
+- [32] Peel, D. A. V. I. D., and G. MacLahlan. "Finite mixture models." John & Sons (2000).
+
+<div id="refer-anchor-33"></div>
+
+- [33] Kim, Byung Soo. Studies of multinomial mixture models. Diss. University of North Carolina at Chapel Hill, 1984.
+
+<div id="refer-anchor-34"></div>
+
+- [34] Webb, Andrew R. "Gamma mixture models for target recognition." Pattern Recognition 33.12 (2000): 2045-2054.
+
+<div id="refer-anchor-35"></div>
+
+- [35] Han, Hui, et al. "A hierarchical naive Bayes mixture model for name disambiguation in author citations." Proceedings of the 2005 ACM symposium on Applied computing. 2005.
+
+<div id="refer-anchor-36"></div>
+
+- [36] Chib, Siddhartha. "Calculating posterior distributions and modal estimates in Markov mixture models." Journal of Econometrics 75.1 (1996): 79-97.
+
+<div id="refer-anchor-37"></div>
+
+- [37] Dempster, Arthur P., Nan M. Laird, and Donald B. Rubin. "Maximum likelihood from incomplete data via the EM algorithm." Journal of the Royal Statistical Society: Series B (Methodological) 39.1 (1977): 1-22.
+
+<div id="refer-anchor-38"></div>
+
+- [38] 李斌. 概率混合模型的研究及其应用[D]. 上海:复旦大学,2009.
