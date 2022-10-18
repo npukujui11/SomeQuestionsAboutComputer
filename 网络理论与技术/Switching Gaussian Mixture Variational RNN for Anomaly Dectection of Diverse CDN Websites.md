@@ -121,7 +121,8 @@
 	+ **VRNN生成过程**：
 		* VAE：从一个先验分布$p(z)$里面采样出一个潜变量$z$，然后通过条件生成网络$p_\phi(x|z)$得到重构样本的分布概率。
 
-		* 与标准RNN相比，VRNN隐藏状态$h_t$现在依赖于潜在变量$z_t$，其中$z_t$由条件VAE学习，该条件VAE以先前隐藏状态$h_{t-1}$为条件。在标准RNN中，$x_t$的生成仅依赖于$h_{t-1}$，而在VRNN中，还依赖于$z_t$。
+		* 与标准RNN相比，VRNN隐藏状态$h_t$现在依赖于潜在变量$z_t$，其中$z_t$由条件VAE学习，该条件VAE以先前隐藏状态$h_{t-1}$为条件。如下图所示，在标准RNN中，$x_t$的生成仅依赖于$h_{t-1}$，而在VRNN中，还依赖于$z_t$。<div><div align=center><img src="picture/标准RNN和VRNN.png" alt="No Picture" style="zoom:100%"/><center><p>标准RNN和VRNN的比较</p></center></div></div>
+
 
 		* VRNN想要生成的是一个序列，那么应该在每一个时间步$t$中都有一个VAE，逐时间步地生成重构样本$x_t$；
 
