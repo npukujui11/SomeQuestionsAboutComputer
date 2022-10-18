@@ -116,13 +116,14 @@
 
 * 变分递归神经网络(Variational RNN)：将原始的VAE拓展到了时间序列上，实现了对于时间序列的表征与生成。在传统的RNN建模当中，**对于序列不确定性的建模是通过最后的输出函数$\mathcal{g}_{\tau}(\cdot)$实现的**，这样简单的方式对于波动大、变动多的序列数据来说是不够的，可能无法很好地分辨信号与噪声。因此Chung等[<sup>[39]</sup>](#refer-anchor-39)将VAE方法拓展到了RNN当中，通过潜在随机变量包含在RNN的隐藏状态，来实现对多为时间序列的表征。
 	+ 递归神经网络(RNN)[<sup>[40]</sup>](#refer-anchor-40)：假设我们有一个长度为$T$的时间序列$\mathbf {x = (x_1, x_2,\ldots,x_T)}$，在时间步长为$t$，RNN读取输入$\mathbf{x}_t$，然后更新隐层状态$\mathbf{h}_t = f_\phi(\mathbf{x}_t, \mathbf{h}_{t-1})$，其中$f_\theta(\cdot)$是以$\theta$为参数的神经网络（例如LSTM、GRU等）；
+	
 		+ 由于RNN是按照从前往后的顺序依次计算的，那么序列$\mathbf{x}$的联合概率分布可以写为：$$\mathbf{p(x_1, x_2,\ldots,x_T)} = \prod_{t=1}^Tp(\mathbf{x_t|x_{<t}})$$其中$ p(\mathbf{x_t}|\mathbf{x_{<T}}) = \mathcal{g}_{\tau}(\mathbf{h_{t-1}})$，即从历史隐层状态$\mathbf{h_{t-1}}$中得到$\mathbf{x_t}$的概率分布，$\mathcal{g}_\tau(\cdot)$是以$\tau$为参数的函数。为了描述概率分布，通常把$\mathcal{g}_\tau(\cdot)$分为两个过程，想通过一个神经网络$\varphi_{\tau}(\cdot)$得到一个参数集$\phi_t$，即$\phi_t=\varphi_\tau(\mathbf{h_{t-1}})$，然后得到一个用$\phi_t$描述的分布$p_{\phi_t}(\mathbf{x_t|x_{<t}})$，例如先利用神经网络得到高斯分布的均值$\mu$和标准差$\sigma$，然后得到用$\mu$和$\sigma$描述的高斯分布$\mathcal{N}(\mu, \sigma^2)$。
 		
+	+ **VRNN与RNN的区别**：		
+		* 与RNN的区别：与标准RNN相比，VRNN隐藏状态$h_t$现在依赖于潜在变量$z_t$，其中$z_t$由条件VAE学习，该条件VAE以先前隐藏状态$h_{t-1}$为条件。<div><div align=center><img src="picture/标准RNN和VRNN在计算隐藏状态的区别.png" alt="No Picture" style="zoom:70%"/><center><p>标准RNN和VRNN在计算隐藏状态的区别</p></center></div></div>如下图所示，在标准RNN中，$x_t$的生成仅依赖于$h_{t-1}$，而在VRNN中，还依赖于$z_t$。<div><div align=center><img src="picture/标准RNN和VRNN.png" alt="No Picture" style="zoom:70%"/><center><p>标准RNN和VRNN的比较</p></center></div></div>
+
 	+ **VRNN生成过程**：
 		* VAE：从一个先验分布$p(z)$里面采样出一个潜变量$z$，然后通过条件生成网络$p_\phi(x|z)$得到重构样本的分布概率。
-
-		* 与标准RNN相比，VRNN隐藏状态$h_t$现在依赖于潜在变量$z_t$，其中$z_t$由条件VAE学习，该条件VAE以先前隐藏状态$h_{t-1}$为条件。如下图所示，在标准RNN中，$x_t$的生成仅依赖于$h_{t-1}$，而在VRNN中，还依赖于$z_t$。<div><div align=center><img src="picture/标准RNN和VRNN.png" alt="No Picture" style="zoom:100%"/><center><p>标准RNN和VRNN的比较</p></center></div></div>
-
 
 		* VRNN想要生成的是一个序列，那么应该在每一个时间步$t$中都有一个VAE，逐时间步地生成重构样本$x_t$；
 
