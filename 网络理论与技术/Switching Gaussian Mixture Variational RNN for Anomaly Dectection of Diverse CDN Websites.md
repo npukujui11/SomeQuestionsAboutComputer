@@ -114,12 +114,14 @@
 		- 变分自编码器通常与自编码器模型相关联，因为它具有架构亲和力，但是在目标和数学公式方面存在显著差异。变分自动编码器允许将统计推断问题（例如从另一个随机变量推断一个随机变量的值）重写为统计优化问题（即找到某些目标函数最小化的参数值）[<sup>[10]</sup>](#refer-anchor-10)[<sup>[11]</sup>](#refer-anchor-11)[<sup>[12]</sup>](#refer-anchor-12)。
 
 
-* 变分递归神经网络(Variational RNN)：将原始的VAE拓展到了时间序列上，实现了对于时间序列的表征与生成。在传统的RNN建模当中，**对于序列不确定性的建模是通过最后的输出函数$\mathcal{g}_{\tau}(\cdot)$实现的**，这样简单的方式对于波动大、变动多的序列数据来说是不够的，可能无法很好地分辨信号与噪声。因此Chung等[<sup>[39]</sup>](#refer-anchor-39)将VAE方法拓展到了RNN当中，通过潜在随机变量来实现对多为时间序列的表征。
-	+ 递归神经网络(RNN)[<sup>[40]</sup>](#refer-anchor-40)：对于一个时间序列$\mathbf {x = (x_1, x_2,\ldots,x_T)}$，在时间步$t$，RNN读取输入$\mathbf{x}_t$，然后更新隐层状态$\mathbf{h}_t = f_\phi(\mathbf{x}_t, \mathbf{h}_{t-1})$，其中$f_\theta(\cdot)$是以$\theta$为参数的神经网络（例如LSTM、GRU等）；
+* 变分递归神经网络(Variational RNN)：将原始的VAE拓展到了时间序列上，实现了对于时间序列的表征与生成。在传统的RNN建模当中，**对于序列不确定性的建模是通过最后的输出函数$\mathcal{g}_{\tau}(\cdot)$实现的**，这样简单的方式对于波动大、变动多的序列数据来说是不够的，可能无法很好地分辨信号与噪声。因此Chung等[<sup>[39]</sup>](#refer-anchor-39)将VAE方法拓展到了RNN当中，通过潜在随机变量包含在RNN的隐藏状态，来实现对多为时间序列的表征。
+	+ 递归神经网络(RNN)[<sup>[40]</sup>](#refer-anchor-40)：假设我们有一个长度为$T$的时间序列$\mathbf {x = (x_1, x_2,\ldots,x_T)}$，在时间步长为$t$，RNN读取输入$\mathbf{x}_t$，然后更新隐层状态$\mathbf{h}_t = f_\phi(\mathbf{x}_t, \mathbf{h}_{t-1})$，其中$f_\theta(\cdot)$是以$\theta$为参数的神经网络（例如LSTM、GRU等）；
 		+ 由于RNN是按照从前往后的顺序依次计算的，那么序列$\mathbf{x}$的联合概率分布可以写为：$$\mathbf{p(x_1, x_2,\ldots,x_T)} = \prod_{t=1}^Tp(\mathbf{x_t|x_{<t}})$$其中$ p(\mathbf{x_t}|\mathbf{x_{<T}}) = \mathcal{g}_{\tau}(\mathbf{h_{t-1}})$，即从历史隐层状态$\mathbf{h_{t-1}}$中得到$\mathbf{x_t}$的概率分布，$\mathcal{g}_\tau(\cdot)$是以$\tau$为参数的函数。为了描述概率分布，通常把$\mathcal{g}_\tau(\cdot)$分为两个过程，想通过一个神经网络$\varphi_{\tau}(\cdot)$得到一个参数集$\phi_t$，即$\phi_t=\varphi_\tau(\mathbf{h_{t-1}})$，然后得到一个用$\phi_t$描述的分布$p_{\phi_t}(\mathbf{x_t|x_{<t}})$，例如先利用神经网络得到高斯分布的均值$\mu$和标准差$\sigma$，然后得到用$\mu$和$\sigma$描述的高斯分布$\mathcal{N}(\mu, \sigma^2)$。
 		
-	+ **生成过程**：
+	+ **VRNN生成过程**：
 		* VAE：从一个先验分布$p(z)$里面采样出一个潜变量$z$，然后通过条件生成网络$p_\phi(x|z)$得到重构样本的分布概率。
+
+		* 与标准RNN相比，VRNN隐藏状态$h_t$现在依赖于潜在变量$z_t$，其中$z_t$由条件VAE学习，该条件VAE以先前隐藏状态$h_{t-1}$为条件。在标准RNN中，$x_t$的生成仅依赖于$h_{t-1}$，而在VRNN中，还依赖于$z_t$。
 
 		* VRNN想要生成的是一个序列，那么应该在每一个时间步$t$中都有一个VAE，逐时间步地生成重构样本$x_t$；
 
@@ -130,6 +132,9 @@
 			+ 隐藏层状态的更新公式为：$$\mathbf{h_t}=f_\theta((\varphi_\tau^{\mathbf{x}}), \varphi_\tau^{\mathbf{z}}(\mathbf {z_t}), \mathbf{h_{t-1}})$$，其中$\mu_{x,t}, \sigma_{x,t}$是条件生成分布的均值和方差，$\varphi_{\tau}^{\mathbf{x}}, \varphi_{\tau}^{\mathbf{x}}$两个网络可以看做是$x,z$的特征提取器。
 
 			+ 由于$\mathbf{h_{t-1}}$依赖于$\mathbf{x_{\le{t-1}}}$和$\mathbf{z_{\le{t-1}}}$，因此关于$\mathbf{x_t}$和$\mathbf{z_t}$的分布可以写作：$p(\mathbf{x_t | z_{\le t}, x_{<t}})$和$p(\mathbf{z_t | x_{< t}, z_{<t}})$，整个序列的联合概率分布可以写为：$$p(\mathbf{x_{\le T},z_{\le T}}) = \prod_{t=1}^Tp(\mathbf{x_t | z_{\le t}, x_{<t}})p(\mathbf{z_t | x_{< t}, z_{<t}})$$
+
+	+ **推断过程**：加入历史依赖后，后验分布的的形式变为$$\mathbf{z_t | x_t} \sim \mathcal{N}(\mu_{z,t},\mathbf{diag}(\sigma_{z,t}^2)), \ \mathbf{where} \ [\mu_{z,t},\sigma_{z,t}] = \varphi_{\tau}^{enc}(\varphi_{\tau}^{\mathbf{x}}(\mathbf{x_t}), \mathbf{h_{t-1}})$$那么联合分布可以写为$$q(\mathbf{z_{\le T}}|\mathbf{x_{\le T}}) = \prod_{t=1}^Tq(\mathbf{z_t} | \mathbf{x_{\le t},z_{<t}})$$模型的各个流程可以总结为
+
 		
 
 ## 前人工作成就总结
