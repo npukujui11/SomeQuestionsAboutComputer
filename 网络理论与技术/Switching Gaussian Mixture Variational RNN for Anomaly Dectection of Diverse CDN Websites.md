@@ -277,7 +277,7 @@
 ## Reference
 <div id="refer-anchor-1"></div>
 
-- [1] Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." arXiv preprint arXiv:1312.6114 (2013).`
+- [1] Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." arXiv preprint arXiv:1312.6114 (2013).
 
 <div id="refer-anchor-2"></div>
 
