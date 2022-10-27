@@ -8,11 +8,12 @@
 * **概率混合模型**[<sup>[38]</sup>](#refer-anchor-38)：概率混合模型可以简单的理解为有多个（甚至是无数个）独立概率模型的凸组合(Convex Combination)，由于概率混合模型使用多个独立的概率分布，它可以描述一个复杂的数据分布，无论数据分布的结构如何复杂，总可以通过增加成分的方式来描述数据分布的局部特性，因此概率混合模型成为最有效的密度工具以及最常用的聚类工具之一。**概率混合模型的本质就是概率分布函数的卷积(convolution)。** 广义上的混合概率模型具有如下一般表达形式$$f(x)=\sum_{k=1}^K w_k f_k(x)$$, $f(\cdot)$表示一个具有$K$个独立成分的混合模型，其中$f_k(\cdot)$表示第k个成分，$w_k$则表示第k个成分的权重。下列是概率混合模型的分类和其最常见的一些模型，以及它们的一些应用。
 
 	+ 有限概率混合模型：有限概率混合模型是较高层面的一个定义，它可以覆盖大多数最常用的混合模型，比如属于指数家族[<sup>[31]</sup>](#refer-anchor-31)(Exponential Family)的高斯（正态）混合模型[<sup>[32]</sup>](#refer-anchor-32)、多项式混合模型[<sup>[33]</sup>](#refer-anchor-33)、伽马混合模型[<sup>[34]</sup>](#refer-anchor-34)等，以及混合朴素贝叶斯模型[<sup>[35]</sup>](#refer-anchor-35)、混合马尔可夫模型[<sup>[36]</sup>](#refer-anchor-36)等
+
 		- **高斯混合模型(GMM)**[<sup>[29]</sup>](#refer-anchor-29)：如果一个变量的取值是多个高斯分布联合产生的，如何进行参数估计呢？如果对于多个高斯分布联合产生的数据，使用单个高斯分布去拟合的化，可以想象拟合结果会很差。 GMM模型就是对由多个高斯分布线性拟合后产生的数据进行参数估计的模型。模型的概率密度函数为：$$f(x)=\sum_{i}^k \phi_{i}\frac{1}{\sqrt{2\pi}\sigma_i}e^{-\frac{(x-\mu)^2}{2\sigma_i^2}}$$我们可以通过EM算法[<sup>[37]</sup>](#refer-anchor-37)（期望最大化算法，Expectation-Maximization Algorithm）估计参数值$\phi_i,  \  \mu_i,  \ \sigma_i,\ i\in[1,\ k] $
 
 			+ **GMM聚类**：可以依据观察值来自的具体高斯分布将其进行聚类，其实就是对于每个观察值求解$P(T=i|x), \ i\in[1, \ k]$.求解方式如下：$${\begin{aligned} P(T=i|x)&=\frac{P(T=i)P(x|T=i)}{P(x)} \\&= \frac{\phi_i \mathcal{N}(x|\mu_i, \ \sigma_i^2) \Delta{x}}{f(x)\Delta{x}} \\&=  \frac{\phi_i \mathcal{N}(x|\mu_i, \ \sigma_i^2)}{\sum_j^k\phi_j\mathcal{N}(x|\mu_j, \ \sigma_j^2)} \end{aligned}}$$ 
 
-		+ **概率主成分分析(PPCA)**[<sup>[30]</sup>](#refer-anchor-30) ：被认为是一种有约束的高斯混合模型(GMMs)，在建模数据量较小的高维数据时，其密度估计的灵活性优于全协方差矩阵的GMMs。
+		- **概率主成分分析(PPCA)**[<sup>[30]</sup>](#refer-anchor-30) ：被认为是一种有约束的高斯混合模型(GMMs)，在建模数据量较小的高维数据时，其密度估计的灵活性优于全协方差矩阵的GMMs。
 
 			+ 假设由一个由N个数据点组成的数据集$\mathbf X = \mathbf x_{n}$，其中每个数据点均为$D$维，$\mathbf x_n \in \mathbb R^{D}$。目标是使用较低维度$K \in D$，在隐变量$\mathbf z_n \in \mathbb R^K$下表示每个$\mathbf x_n$。主轴集合$\mathbf W$将隐变量与该数据相关联。
 
