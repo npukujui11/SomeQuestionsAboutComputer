@@ -445,3 +445,15 @@
 <div id="refer-anchor-42"></div>
 
 - [42] Oh, Sang Min, et al. "Learning and inference in parametric switching linear dynamic systems." Tenth IEEE International Conference on Computer Vision (ICCV'05) Volume 1. Vol. 2. IEEE, 2005.
+
+<div id="refer-anchor-43"></div>
+
+- [43] Linderman, Scott W., et al. "Recurrent switching linear dynamical systems." arXiv preprint arXiv:1610.08466 (2016).
+
+<div id="refer-anchor-44"></div>
+
+- [44] Becker-Ehmck, Philip, Jan Peters, and Patrick Van Der Smagt. "Switching linear dynamics for variational bayes filtering." International Conference on Machine Learning. PMLR, 2019.
+
+<div id="refer-anchor-45"></div>
+
+- [45] Chen, Wenchao, et al. "Switching Poisson gamma dynamical systems." International Joint Conference on Artificial Intelligence. 2020.
