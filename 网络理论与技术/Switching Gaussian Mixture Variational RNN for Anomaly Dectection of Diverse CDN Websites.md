@@ -141,7 +141,7 @@
 
 	+ **推断过程**：加入历史依赖后，后验分布的的形式变为$$\mathbf{z_t | x_t} \sim \mathcal{N}(\mu_{z,t},\mathbf{diag}(\sigma_{z,t}^2)), \ \mathbf{where} \ [\mu_{z,t},\sigma_{z,t}] = \varphi_{\tau}^{enc}(\varphi_{\tau}^{\mathbf{x}}(\mathbf{x_t}), \mathbf{h_{t-1}})$$那么联合分布可以写为$$q(\mathbf{z_{\le T}}|\mathbf{x_{\le T}}) = \prod_{t=1}^Tq(\mathbf{z_t} | \mathbf{x_{\le t},z_{<t}})$$
 
-* 
+* **切换机制**：
 
 		
 
@@ -437,3 +437,11 @@
 <div id="refer-anchor-40"></div>
 
 - [40] Chinea, Alejandro. "Understanding the principles of recursive neural networks: A generative approach to tackle model complexity." International Conference on Artificial Neural Networks. Springer, Berlin, Heidelberg, 2009.
+
+<div id="refer-anchor-41"></div>
+
+- [41] Chang, Chaw-Bing, and Michael Athans. "State estimation for discrete systems with switching parameters." IEEE Transactions on Aerospace and Electronic Systems 3 (1978): 418-425.
+
+<div id="refer-anchor-42"></div>
+
+- [42] Oh, Sang Min, et al. "Learning and inference in parametric switching linear dynamic systems." Tenth IEEE International Conference on Computer Vision (ICCV'05) Volume 1. Vol. 2. IEEE, 2005.
