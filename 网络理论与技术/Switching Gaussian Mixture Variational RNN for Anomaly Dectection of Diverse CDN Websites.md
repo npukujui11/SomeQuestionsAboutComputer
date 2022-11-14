@@ -250,16 +250,16 @@
        	 - 算法思想：将某一个时间段当做一个窗口，用一个计数器记录这个窗口接收请求的次数，每接收一次请求便让这个计数器的值加一,如果计数器的值大于请求阈值的时候，开始限流。当这个时间段结束后，会初始化窗口的计数器数据，相当于重新开了一个窗口重新监控请求次数。[<sup>[51]</sup>](#refer-anchor-51)。
        	 - 优点：占用的内存较小，只需存储窗口的计数器
        	 - 缺点：窗口切换时可能会产生两倍于阈值流量的请求；一段时间内（不超过时间窗口）系统服务不可用
+       	  <div align=center>
+            <img src="picture/时间窗口.png"
+                alt="No Picture"
+                style="zoom:100%"/>
+            <center><p>固定时间窗口</p></center>
+        </div>
 
     + **滑动时间窗算法**：时间窗口算法也可以称之为：固定时间窗算法
        	 - 算法原理：滑动时间窗口算法将一个计时窗口分成了若干个小窗口，然后每个小窗口维护一个独立的计数器。
         当请求的时间大于当前窗口的最大时间时，将计时窗口向前平移一个小窗口。平移时，将第一个小窗口的数据丢弃，然后将第二个小窗口设置为第一个小窗口，同时在最后面新增一个小窗口，将新的请求放在新增的小窗口中。同时要保证整个窗口中所有小窗口的请求数目之后不能超过设定的阈值。
-        <div align=center>
-            <img src="picture/时间窗口.png"
-                alt="No Picture"
-                style="zoom:100%"/>
-            <center><p>时间窗口</p></center>
-        </div>
 
        	 - 特点：
 
@@ -277,10 +277,10 @@
     + **归一化方法**[<sup>[50]</sup>](#refer-anchor-50)：
        	 - 最大最小归一化(Min-Max Normalization)：也称为离差标准化
         <div align=center>
-            <img src="picture/归一化.png"
+            <img src="picture/做大最小归一化.png"
                 alt="No Picture"
                 style="zoom:100%"/>
-            <center><p>归一化</p></center>
+            <center><p>做大最小归一化</p></center>
         </div>
             - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1
         <div align=center>
@@ -312,7 +312,7 @@
     <div align=center>
     <img src="picture/梯度下降算法.png"
         alt="No Picture"
-        style="zoom:60%"/>
+        style="zoom:40%"/>
     <center><p>梯度下降算法</p></center>
     </div>
 
