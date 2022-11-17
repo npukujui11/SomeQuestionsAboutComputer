@@ -272,13 +272,7 @@
 
     + **归一化方法**[<sup>[50]</sup>](#refer-anchor-50)：下列是一些常见的归一化方法。
        	 - 最大最小归一化(Min-Max Normalization)：也称为离差标准化，做大最小归一化$$\int_{-\infty}^{\infty} \psi^*(x)\psi(x) dx = 1$$
-         - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1
-        <div align=center>
-            <img src="picture/Z-score标准化.png"
-                alt="No Picture"
-                style="zoom:100%"/>
-            <center><p>Z-score标准化</p></center>
-        </div>
+         - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1。$$ \begin{align} Average \ value : \mu=\frac{1}{m}\sum_{i=1}^m x_i \\ Standard \ deviation : \sigma=\sqrt{\frac{1}{m} \sum_{i=1}^{m}(x_i-\mu)^2} \end{align}$$其转换函数为$$x^{\prime}=\frac{x-\mu}{\sigma}$$
        	 - 小数定标规范化：通过移动特征数据的小数位数，将其转换到[-1,1]之间，移动的小数位由特征值绝对值的最大值决定
     + **归一化使用的场景**：
        	 - 对输出结果范围有要求；
