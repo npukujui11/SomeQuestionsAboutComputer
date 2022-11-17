@@ -250,12 +250,13 @@
        	 - 算法思想：将某一个时间段当做一个窗口，用一个计数器记录这个窗口接收请求的次数，每接收一次请求便让这个计数器的值加一,如果计数器的值大于请求阈值的时候，开始限流。当这个时间段结束后，会初始化窗口的计数器数据，相当于重新开了一个窗口重新监控请求次数。[<sup>[51]</sup>](#refer-anchor-51)。
        	 - 优点：占用的内存较小，只需存储窗口的计数器
        	 - 缺点：窗口切换时可能会产生两倍于阈值流量的请求；一段时间内（不超过时间窗口）系统服务不可用
-       	  <div align=center>
+       	 - <font color=red>（建议这个图重新画一个，原图不太好看）</font> 
+       	<div align=center>
             <img src="picture/时间窗口.png"
                 alt="No Picture"
                 style="zoom:100%"/>
             <center><p>固定时间窗口</p></center>
-        </div>
+		</div>
 
     + **滑动时间窗算法**：时间窗口算法也可以称之为：固定时间窗算法
        	 - 算法原理：滑动时间窗口算法将一个计时窗口分成了若干个小窗口，然后每个小窗口维护一个独立的计数器。
@@ -271,8 +272,17 @@
     + **奇异样本数据**：相对于其他输入样本特别大或特别小的样本矢量（即特征向量）。奇异样本数据的存在会引起训练时间增大，同时也可能导致无法收敛，因此，当存在奇异样本数据时，在进行训练之前需要对预处理数据进行归一化。
 
     + **归一化方法**[<sup>[50]</sup>](#refer-anchor-50)：下列是一些常见的归一化方法。
-       	 - 最大最小归一化(Min-Max Normalization)：也称为离差标准化，做大最小归一化$$\int_{-\infty}^{\infty} \psi^*(x)\psi(x) dx = 1$$
-         - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1。$$ \begin{align} Average \ value : \mu=\frac{1}{m}\sum_{i=1}^m x_i \\ Standard \ deviation : \sigma=\sqrt{\frac{1}{m} \sum_{i=1}^{m}(x_i-\mu)^2} \end{align}$$其转换函数为$$x^{\prime}=\frac{x-\mu}{\sigma}$$
+       	 - 最大最小归一化(Min-Max Normalization)：也称为离差标准化，做大最小归一化$$\begin{align}
+		 \int_{-\infty}^{\infty} \psi^*(x)\psi(x) dx = 1			
+		 \end{align}$$
+         - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1。
+		$$ \begin{align} 
+		Average \ value : \mu=\frac{1}{m}\sum_{i=1}^m x_i \\ Standard \ deviation : \sigma=\sqrt{\frac{1}{m} \sum_{i=1}^{m}(x_i-\mu)^2} 
+		\end{align}$$
+		其转换函数为
+		$$\begin{align}
+		x^{\prime}=\frac{x-\mu}{\sigma}
+		\end{align}$$
        	 - 小数定标规范化：通过移动特征数据的小数位数，将其转换到[-1,1]之间，移动的小数位由特征值绝对值的最大值决定
     + **归一化使用场景**：
        	 - 对输出结果范围有要求；
