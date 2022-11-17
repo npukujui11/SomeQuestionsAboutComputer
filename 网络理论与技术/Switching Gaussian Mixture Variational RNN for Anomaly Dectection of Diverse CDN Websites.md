@@ -348,7 +348,7 @@
 * 作者提出异常值使用Xt的重构概率来表示，当St低于特定的阈值时xt会被视为异常
 
 * 对于作者提出的模型性能的评价指标选用精确度、召回率和F1分数。实验结果表明SGmVRNN在“一个模型适用于一个网站”到“一个模型适用于所有网站”的实验中，性能下降较小
-    + F-score：亦称为F-measure，是一种量测算法的精确度常用的指标，经常用来判断算法的精确度[<sup>[52]</sup>](#refer-anchor-52)[<sup>[54]</sup>](#refer-anchor-54)。目前在辨识、侦测相关的算法中经常会分别提到精确率（precision）和召回率（recall），F-score能同时考虑这两个数值，平衡地反映这个算法的精确度。$$F-score=\frac{(1+\beta^2)precision \times recall}{\beta^2precision + recall}$$根据上式子，只要precision或recall趋近于0，F-score就会趋近于0，代表着这个算法的精确度非常低。一个好的算法，最好能够平衡recall和precision，且尽量让两种指标都很高。
+    + F-score：亦称为F-measure，是一种量测算法的精确度常用的指标，经常用来判断算法的精确度[<sup>[52]</sup>](#refer-anchor-52)[<sup>[54]</sup>](#refer-anchor-54)。目前在辨识、侦测相关的算法中经常会分别提到精确率（precision）和召回率（recall），F-score能同时考虑这两个数值，平衡地反映这个算法的精确度。$$\begin{align} F-score=\frac{(1+\beta^2)precision \times recall}{\beta^2precision + recall} \end{align}$$根据上式子，只要precision或recall趋近于0，F-score就会趋近于0，代表着这个算法的精确度非常低。一个好的算法，最好能够平衡recall和precision，且尽量让两种指标都很高。
 
        	 - F-score的组成元素：
 
@@ -365,15 +365,9 @@
 
             precision: 准确率，又称为查准率，表示预测结果中，预测为正样本的样本中，正确预测为正样本的概率
 
-            recall: 召回率，又称为查全率，表示在原始样本的正样本中，最后被正确预测为正样本的概率
-            <div align=center>
-                <img src="picture/精确率计算.png"
-                    alt="No Picture"
-                    style="zoom:100%"/>
-                <center><p>精确率计算</p></center>
-            </div>
+            recall: 召回率，又称为查全率，表示在原始样本的正样本中，最后被正确预测为正样本的概率$$\begin{align} Accuracy=\frac{TP+TN}{TP+FP+TN+FN} \\ Precision=\frac{TP}{TP+FP} \\ Recall = \frac{TP}{TP+FN} \end{align}$$
 
-    + F1-score：是指{\displaystyle \beta =1}\beta =1时的F-score，代表Precision和Recall权重一样[<sup>[53]</sup>](#refer-anchor-53)，是统计学中用来衡量二分类模型精确度的一种指标，同时兼顾了分类模型的精确率和召回率，它可以看作是模型精确率和召回率的一种调和平均。
+    + F1-score：是指${\displaystyle \beta =1}$时的F-score，代表Precision和Recall权重一样[<sup>[53]</sup>](#refer-anchor-53)，是统计学中用来衡量二分类模型精确度的一种指标，同时兼顾了分类模型的精确率和召回率，它可以看作是模型精确率和召回率的一种调和平均。
 
 
 ## Reference
