@@ -245,6 +245,81 @@
 	+ **异常检测模块(Anomaly Detection)**：根据表示模型推导的重构概率来检测异常。
 
 #### Data Preprocessing
+*  滑动时间窗方法（Sliding time window approaches）：
+    + **时间窗口算法**：时间窗口算法也可以称之为：固定时间窗算法
+       	 - 算法思想：将某一个时间段当做一个窗口，用一个计数器记录这个窗口接收请求的次数，每接收一次请求便让这个计数器的值加一,如果计数器的值大于请求阈值的时候，开始限流。当这个时间段结束后，会初始化窗口的计数器数据，相当于重新开了一个窗口重新监控请求次数。[<sup>[51]</sup>](#refer-anchor-51)。
+       	 - 优点：占用的内存较小，只需存储窗口的计数器
+       	 - 缺点：窗口切换时可能会产生两倍于阈值流量的请求；一段时间内（不超过时间窗口）系统服务不可用
+       	  <div align=center>
+            <img src="picture/时间窗口.png"
+                alt="No Picture"
+                style="zoom:100%"/>
+            <center><p>固定时间窗口</p></center>
+        </div>
+
+    + **滑动时间窗算法**：时间窗口算法也可以称之为：固定时间窗算法
+       	 - 算法原理：滑动时间窗口算法将一个计时窗口分成了若干个小窗口，然后每个小窗口维护一个独立的计数器。
+        当请求的时间大于当前窗口的最大时间时，将计时窗口向前平移一个小窗口。平移时，将第一个小窗口的数据丢弃，然后将第二个小窗口设置为第一个小窗口，同时在最后面新增一个小窗口，将新的请求放在新增的小窗口中。同时要保证整个窗口中所有小窗口的请求数目之后不能超过设定的阈值。
+
+       	 - 特点：
+
+            + 当窗口中流量到达阈值时，流量会瞬间切断；
+
+            + 避免固定时间窗口算法固定窗口切换时可能会产生两倍阈值流量请求的问题
+
+*  归一化[<sup>[46]</sup>](#refer-anchor-46)：使得预处理的数据被限定在一定的范围内，从而消除奇异样本数据导致的不良影响。
+    + **奇异样本数据**：相对于其他输入样本特别大或特别小的样本矢量（即特征向量）。
+    奇异样本数据的存在会引起训练时间增大，同时也可能导致无法收敛，因此，当存在奇异样本数据时，在进行训练之前需要对预处理数据进行归一化。
+
+    + **归一化的优点**：
+       	 - 数据分布更规范，使得梯度下降算法更有效，加快求得最优解的速度；
+       	 - 提高精度
+    + **归一化方法**[<sup>[50]</sup>](#refer-anchor-50)：
+       	 - 最大最小归一化(Min-Max Normalization)：也称为离差标准化
+        <div align=center>
+            <img src="picture/做大最小归一化.png"
+                alt="No Picture"
+                style="zoom:100%"/>
+            <center><p>做大最小归一化</p></center>
+        </div>
+            - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1
+        <div align=center>
+            <img src="picture/Z-score标准化.png"
+                alt="No Picture"
+                style="zoom:100%"/>
+            <center><p>Z-score标准化</p></center>
+        </div>
+       	 - 小数定标规范化：通过移动特征数据的小数位数，将其转换到[-1,1]之间，移动的小数位由特征值绝对值的最大值决定
+    + **归一化使用的场景**：
+       	 - 对输出结果范围有要求；
+       	 - 数据较为稳定，不存在极端的最大最小值
+       	 - 数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响
+* 梯度下降法（Gradient descent）：通常也称为最陡下降法
+    + **算法的思想**：先任取点（x0,f(x0))，求f(x)在该点x0的导数f"(x0),在用x0减去导数值f"(x0),计算所得就是新的点x1。然后再用x1减去f"(x1)得x2……以此类推，循环多次，慢慢x值就无限接近极小值点。
+    梯度下降方法基于以下的观察：如果实值函数{\displaystyle F(\mathbf {x} )}F({\mathbf  {x}})在点{\displaystyle \mathbf {a} }\mathbf {a} 处可微且有定义，那么函数{\displaystyle F(\mathbf {x} )}F({\mathbf  {x}})在{\displaystyle \mathbf {a} }\mathbf {a} 点沿着梯度相反的方向 {\displaystyle -\nabla F(\mathbf {a} )}-\nabla F({\mathbf  {a}}) 下降最多。
+    因而，如果
+    {\displaystyle \mathbf {b} =\mathbf {a} -\gamma \nabla F(\mathbf {a} )}{\mathbf  {b}}={\mathbf  {a}}-\gamma \nabla F({\mathbf  {a}})
+    对于{\displaystyle \gamma >0}\gamma >0为一个够小数值时成立，那么{\displaystyle F(\mathbf {a} )\geq F(\mathbf {b} )}F({\mathbf  {a}})\geq F({\mathbf  {b}})。
+    考虑到这一点，我们可以从函数{\displaystyle F}F的局部极小值的初始估计{\displaystyle \mathbf {x} _{0}}{\mathbf  {x}}_{0}出发，并考虑如下序列 {\displaystyle \mathbf {x} _{0},\mathbf {x} _{1},\mathbf {x} _{2},\dots }{\mathbf  {x}}_{0},{\mathbf  {x}}_{1},{\mathbf  {x}}_{2},\dots 使得
+    {\displaystyle \mathbf {x} _{n+1}=\mathbf {x} _{n}-\gamma _{n}\nabla F(\mathbf {x} _{n}),\ n\geq 0}\mathbf{x}_{n+1}=\mathbf{x}_n-\gamma_n \nabla F(\mathbf{x}_n),\ n \ge 0。
+
+    因此可得到
+
+    {\displaystyle F(\mathbf {x} _{0})\geq F(\mathbf {x} _{1})\geq F(\mathbf {x} _{2})\geq \cdots ,}F({\mathbf  {x}}_{0})\geq F({\mathbf  {x}}_{1})\geq F({\mathbf  {x}}_{2})\geq \cdots ,
+    如果顺利的话序列{\displaystyle (\mathbf {x} _{n})}({\mathbf  {x}}_{n})收敛到期望的局部极小值。注意每次迭代步长{\displaystyle \gamma }\gamma 可以改变。
+
+    下图示例了这一过程，这里假设{\displaystyle F}F定义在平面上，并且函数图像是一个碗形。蓝色的曲线是等高线（水平集），即函数{\displaystyle F}F为常数的集合构成的曲线。红色的箭头指向该点梯度的反方向。（一点处的梯度方向与通过该点的等高线垂直）。沿着梯度下降方向，将最终到达碗底，即函数{\displaystyle F}F局部极小值的点[<sup>[47]</sup>](#refer-anchor-47)[<sup>[48]</sup>](#refer-anchor-48)。
+    <div align=center>
+    <img src="picture/梯度下降算法.png"
+        alt="No Picture"
+        style="zoom:40%"/>
+    <center><p>梯度下降算法</p></center>
+    </div>
+
+    + **梯度下降法的缺点**[<sup>[49]</sup>](#refer-anchor-49)：
+       	 - 靠近局部极小值时速度减慢
+       	 - 直线搜索可能会产生一些问题
+       	 - 可能会“之字型”下降
 
 #### Representation Model
 
@@ -276,6 +351,50 @@
 ##### 模型参数学习
 
 * 作者提出了一种自下而上自编码变分推理方法以获取SGmVRNN模型的参数，结合参数的自底向上似然和自底向上先验信息进行精确的后验逼近，从而得到SGmVRNN的丰富潜在表示。作者为了实现潜变量后验的精确逼近，我们提出了一种SGmVRNN的向上向下自编码变分推理方法。
+
+#### Anomaly Detection
+* 异常检测：检测出不符合期望行为的数据
+    + **三大类异常检测方法**[<sup>[52]</sup>](#refer-anchor-52)：
+       	 - 无监督异常检测方法：寻找与其他数据最不匹配的实例来检测出未标记测试数据的异常
+       	 - 监督式异常检测方法：需要一个已经被标记“正常”与“异常”的数据集，并涉及到训练分类器，去除异常数据的数据集往往会在统计上显著提升准确性[<sup>[55]</sup>](#refer-anchor-55)
+       	 - 半监督式异常检测方法：根据一个给定的正常训练数据集创建一个表示正常行为的模型，然后检测由学习模型生成的测试实例的可能性
+* 作者提出异常值使用Xt的重构概率来表示，当St低于特定的阈值时xt会被视为异常
+
+* 对于作者提出的模型性能的评价指标选用精确度、召回率和F1分数。实验结果表明SGmVRNN在“一个模型适用于一个网站”到“一个模型适用于所有网站”的实验中，性能下降较小
+    + F-score：亦称为F-measure，是一种量测算法的精确度常用的指标，经常用来判断算法的精确度[<sup>[52]</sup>](#refer-anchor-52)[<sup>[54]</sup>](#refer-anchor-54)。目前在辨识、侦测相关的算法中经常会分别提到精确率（precision）和召回率（recall），F-score能同时考虑这两个数值，平衡地反映这个算法的精确度。
+        <div align=center>
+            <img src="picture/F-score.png"
+                alt="No Picture"
+                style="zoom:100%"/>
+            <center><p>F-score</p></center>
+        </div>
+        根据这个式子，只要precision或recall趋近于0，F-score就会趋近于0，代表着这个算法的精确度非常低。一个好的算法，最好能够平衡recall和precision，且尽量让两种指标都很高。
+
+       	 - F-score的组成元素：
+
+            TP (true positive)：事实上为真，而且被我们的方法判断为真的情形。
+
+            FN (false negative)：事实上为真，却被我们的方法判断为不真的情形。
+
+            FP (false positive)：事实上不为真，却被我们的方法误判为真的情形。
+
+            TN (true negative)：事实上不为真，而且被我们的方法判断成不为真的情形。
+       	 - precision 和 recall 的计算:
+
+            Accuracy：表示预测结果的精确度，预测正确的样本数除以总样本数
+
+            precision: 准确率，又称为查准率，表示预测结果中，预测为正样本的样本中，正确预测为正样本的概率
+
+            recall: 召回率，又称为查全率，表示在原始样本的正样本中，最后被正确预测为正样本的概率
+            <div align=center>
+                <img src="picture/精确率计算.png"
+                    alt="No Picture"
+                    style="zoom:100%"/>
+                <center><p>精确率计算</p></center>
+            </div>
+
+    + F1-score：是指{\displaystyle \beta =1}\beta =1时的F-score，代表Precision和Recall权重一样[<sup>[53]</sup>](#refer-anchor-53)，是统计学中用来衡量二分类模型精确度的一种指标，同时兼顾了分类模型的精确率和召回率，它可以看作是模型精确率和召回率的一种调和平均。
+
 
 ## Reference
 <div id="refer-anchor-1"></div>
@@ -457,3 +576,43 @@
 <div id="refer-anchor-45"></div>
 
 - [45] Chen, Wenchao, et al. "Switching Poisson gamma dynamical systems." International Joint Conference on Artificial Intelligence. 2020.
+
+<div id="refer-anchor-46"></div>
+
+- [46] Griffiths, David J. Introduction to Quantum Mechanics (2nd ed.). Prentice Hall. 2004: pp. 12–14. ISBN 0-13-111892-7.
+
+<div id="refer-anchor-47"></div>
+
+- [47] Mordecai Avriel (2003). Nonlinear Programming: Analysis and Methods. Dover Publishing. ISBN 0-486-43227-0.
+
+<div id="refer-anchor-48"></div>
+
+- [48] Jan A. Snyman (2005). Practical Mathematical Optimization: An Introduction to Basic Optimization Theory and Classical and New Gradient-Based Algorithms. Springer Publishing. ISBN 0-387-24348-8.
+
+<div id="refer-anchor-49"></div>
+
+- [49] David W. A. Bourne. Steepest Descent Method.
+
+<div id="refer-anchor-50"></div>
+
+- [50 [归一化方法] (https://blog.csdn.net/lyq_12/article/details/81349525).
+
+<div id="refer-anchor-51"></div>
+
+- [51] [滑动时间窗口] (https://blog.csdn.net/chyh741/article/details/124085421).
+
+<div id="refer-anchor-52"></div>
+
+- [52] 陈斌,陈松灿,潘志松,等.异常检测综述[J].山东大学学报：工学版,2009(6):13-23.
+
+<div id="refer-anchor-53"></div>
+
+- [53] Lipton Z C, Elkan C, Narayanaswamy B. Thresholding classifiers to maximize F1 score[J]. arXiv preprint arXiv:1402.1892, 2014.
+
+<div id="refer-anchor-54"></div>
+
+- [54]H. Xu, W. Chen, N. Zhao, Z. Li, J. Bu, Z. Li, Y . Liu, Y . Zhao, D. Pei, Y . Feng, J. Chen, Z. Wang, and H. Qiao, “Unsupervised anomaly detection via variational auto-encoder for seasonal kpis in web applications,” in WWW ’18, 2018, pp. 187–196.
+
+<div id="refer-anchor-30"></div>
+
+- [55]Smith M R, Martinez T. Improving classification accuracy by identifying and removing instances that should be misclassified[C]//The 2011 International Joint Conference on Neural Networks. IEEE, 2011: 2690-2697.
