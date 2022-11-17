@@ -274,12 +274,13 @@
        	 - 最大最小归一化(Min-Max Normalization)：也称为离差标准化，做大最小归一化$$\int_{-\infty}^{\infty} \psi^*(x)\psi(x) dx = 1$$
          - Z-score标准化：求得数据集的均值和标准差，将数据集标准化，经处理后的数据符合标准正态分布，均值为0，标准差为1。$$ \begin{align} Average \ value : \mu=\frac{1}{m}\sum_{i=1}^m x_i \\ Standard \ deviation : \sigma=\sqrt{\frac{1}{m} \sum_{i=1}^{m}(x_i-\mu)^2} \end{align}$$其转换函数为$$x^{\prime}=\frac{x-\mu}{\sigma}$$
        	 - 小数定标规范化：通过移动特征数据的小数位数，将其转换到[-1,1]之间，移动的小数位由特征值绝对值的最大值决定
-    + **归一化使用的场景**：
+    + **归一化使用场景**：
        	 - 对输出结果范围有要求；
        	 - 数据较为稳定，不存在极端的最大最小值
        	 - 数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响
-* 梯度下降法（Gradient descent）：通常也称为最陡下降法
-    + **算法的思想**：先任取点（x0,f(x0))，求f(x)在该点x0的导数f"(x0),在用x0减去导数值f"(x0),计算所得就是新的点x1。然后再用x1减去f"(x1)得x2……以此类推，循环多次，慢慢x值就无限接近极小值点。
+
+* 梯度下降法（Gradient descent）[<sup>[56]</sup>](#refer-anchor-56)：是一个一阶优化算法，通常也称为最陡下降法（Steepest descent）
+    + **算法的思想**：先任取一点$(x_0,f(x_0))$，求$f(x)$在该点$x_0$的导数$f^{\prime}(x_0)$，在用$x_0$减去导数值$f^{\prime}(x_0)$，计算所得就是新的点$x_1$。然后再用x1减去f"(x1)得x2……以此类推，循环多次，慢慢x值就无限接近极小值点。
     梯度下降方法基于以下的观察：如果实值函数{\displaystyle F(\mathbf {x} )}F({\mathbf  {x}})在点{\displaystyle \mathbf {a} }\mathbf {a} 处可微且有定义，那么函数{\displaystyle F(\mathbf {x} )}F({\mathbf  {x}})在{\displaystyle \mathbf {a} }\mathbf {a} 点沿着梯度相反的方向 {\displaystyle -\nabla F(\mathbf {a} )}-\nabla F({\mathbf  {a}}) 下降最多。
     因而，如果
     {\displaystyle \mathbf {b} =\mathbf {a} -\gamma \nabla F(\mathbf {a} )}{\mathbf  {b}}={\mathbf  {a}}-\gamma \nabla F({\mathbf  {a}})
@@ -595,8 +596,12 @@
 
 <div id="refer-anchor-54"></div>
 
-- [54]H. Xu, W. Chen, N. Zhao, Z. Li, J. Bu, Z. Li, Y . Liu, Y . Zhao, D. Pei, Y . Feng, J. Chen, Z. Wang, and H. Qiao, “Unsupervised anomaly detection via variational auto-encoder for seasonal kpis in web applications,” in WWW ’18, 2018, pp. 187–196.
+- [54] H. Xu, W. Chen, N. Zhao, Z. Li, J. Bu, Z. Li, Y . Liu, Y . Zhao, D. Pei, Y . Feng, J. Chen, Z. Wang, and H. Qiao, “Unsupervised anomaly detection via variational auto-encoder for seasonal kpis in web applications,” in WWW ’18, 2018, pp. 187–196.
 
-<div id="refer-anchor-30"></div>
+<div id="refer-anchor-55"></div>
 
-- [55]Smith M R, Martinez T. Improving classification accuracy by identifying and removing instances that should be misclassified[C]//The 2011 International Joint Conference on Neural Networks. IEEE, 2011: 2690-2697.
+- [55] Smith M R, Martinez T. Improving classification accuracy by identifying and removing instances that should be misclassified[C]//The 2011 International Joint Conference on Neural Networks. IEEE, 2011: 2690-2697.
+
+<div id="refer-anchor-56"></div>
+
+- [56] Lemaréchal, C. (2012). "Cauchy and the Gradient Method" (PDF). Doc Math Extra: 251–254.
