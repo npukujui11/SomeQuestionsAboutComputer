@@ -405,7 +405,7 @@
 
 <div id="refer-anchor-9"></div>
 
-- [9] [【深度学习】AE与VAE] (https://blog.csdn.net/sinat_36197913/article/details/93630246?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-93630246-blog-110879937.pc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-93630246-blog-110879937.pc_relevant_multi_platform_whitelistv3&utm_relevant_index=2)
+- [9] [【深度学习】AE与VAE](https://blog.csdn.net/sinat_36197913/article/details/93630246?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-93630246-blog-110879937.pc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-93630246-blog-110879937.pc_relevant_multi_platform_whitelistv3&utm_relevant_index=2)
 
 <div id="refer-anchor-10"></div>
 
@@ -569,11 +569,11 @@
 
 <div id="refer-anchor-50"></div>
 
-- [50 [归一化方法] (https://blog.csdn.net/lyq_12/article/details/81349525).
+- [50 [归一化方法](https://blog.csdn.net/lyq_12/article/details/81349525).
 
 <div id="refer-anchor-51"></div>
 
-- [51] [滑动时间窗口] (https://blog.csdn.net/chyh741/article/details/124085421).
+- [51] [滑动时间窗口](https://blog.csdn.net/chyh741/article/details/124085421).
 
 <div id="refer-anchor-52"></div>
 
