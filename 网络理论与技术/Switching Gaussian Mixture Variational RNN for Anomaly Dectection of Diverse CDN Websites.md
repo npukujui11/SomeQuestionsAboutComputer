@@ -279,8 +279,10 @@
        	 - 数据较为稳定，不存在极端的最大最小值
        	 - 数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响
 
+<font color=red>（结合梯度下降法的定义去描述，结合维基百科或者最初的论文上的定义。）</font> 
+
 * 梯度下降法（Gradient descent）[<sup>[56]</sup>](#refer-anchor-56)：是一个一阶优化算法，通常也称为最陡下降法（Steepest descent）
-    + **算法的思想**：先任取一点$(x_0,f(x_0))$，求$f(x)$在该点$x_0$的导数$f^{\prime}(x_0)$，在用$x_0$减去导数值$f^{\prime}(x_0)$，计算所得就是新的点$x_1$。然后再用x1减去f"(x1)得x2……以此类推，循环多次，慢慢x值就无限接近极小值点。
+    + **算法思想**：先任取一点$(x_0,f(x_0))$，求$f(x)$在该点$x_0$的导数$f^{\prime}(x_0)$，在用$x_0$减去导数值$f^{\prime}(x_0)$，计算所得就是新的点$x_1$。然后再用x1减去f"(x1)得x2……以此类推，循环多次，慢慢x值就无限接近极小值点。
     梯度下降方法基于以下的观察：如果实值函数{\displaystyle F(\mathbf {x} )}F({\mathbf  {x}})在点{\displaystyle \mathbf {a} }\mathbf {a} 处可微且有定义，那么函数{\displaystyle F(\mathbf {x} )}F({\mathbf  {x}})在{\displaystyle \mathbf {a} }\mathbf {a} 点沿着梯度相反的方向 {\displaystyle -\nabla F(\mathbf {a} )}-\nabla F({\mathbf  {a}}) 下降最多。
     因而，如果
     {\displaystyle \mathbf {b} =\mathbf {a} -\gamma \nabla F(\mathbf {a} )}{\mathbf  {b}}={\mathbf  {a}}-\gamma \nabla F({\mathbf  {a}})
@@ -301,7 +303,7 @@
     <center><p>梯度下降算法</p></center>
     </div>
 
-    + **梯度下降法的缺点**[<sup>[49]</sup>](#refer-anchor-49)：
+    + **梯度下降法的缺点**[<sup>[49]</sup>](#refer-anchor-49)：<font color=red>（细化一下每一点的描述）</font> 
        	 - 靠近局部极小值时速度减慢
        	 - 直线搜索可能会产生一些问题
        	 - 可能会“之字型”下降
