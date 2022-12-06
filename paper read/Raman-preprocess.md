@@ -26,7 +26,7 @@
 
   + 如果最终振动状态的分子比初始状态时能量高，即**分子从基态跃迁到激发态**，所激发出来的光子频率则较低，以确保系统的总能量守恒。这个频率的改变被命名为**Stokes shift**。如果最终振动状态的分子比初始状态时能量低，即**分子从激发态跃迁到基态**，所激发出来的光子频率则较高，这一个频率的改变被命名为**Anti-Stokes shift**。
 
-  + **光的波动性原因，拉曼光谱的产生源于分子振动过程中诱导偶极矩的变化**：分子在光电场E中，产生诱导偶极矩即感应偶极矩$\rho$，$$\rho=\alpha E$$，其中$\alpha$为极化率，在分子振动过程中，若其诱导偶极矩发生变化，则分子会与入射光子进行能量交换，产生拉曼光谱。
+  + **光的波动性原因，拉曼光谱的产生源于分子振动过程中诱导偶极矩的变化**：分子在光电场E中，产生诱导偶极矩即感应偶极矩$\rho$，$$\begin{align}\rho=\alpha E\end{align}$$，其中$\alpha$为极化率，在分子振动过程中，若其诱导偶极矩发生变化，则分子会与入射光子进行能量交换，产生拉曼光谱。
     - 极化率$\alpha$：衡量分子在电场作用下发生极化的难易程度;
     - 分子中两原子距离最大时，$\alpha$也最大；
     - **光谱选律**：只有引起极化率变化的分子振动才产生拉曼散射；
@@ -35,7 +35,7 @@
 
 * ***拉曼光谱图怎么去看？*** 
   + 拉曼光谱图以散射强度为纵坐标，拉曼位移为横坐标，瑞利线位置为零点。一副完整的拉曼光谱包括瑞利线，斯托克斯线，反斯托克斯线。
-        <div align=center><img src="picture/拉曼散射光谱图.jpg" alt="No Picture" style="zoom:70%"/><center><p>拉曼散射光谱图</p></center></div>
+        <div align=center><img src="picture/拉曼散射光谱图.jpg" alt="No Picture" style="zoom:70%"/><center><p>图一 拉曼散射光谱图</p></center></div>
 
       - 瑞利线强度最大，$\Delta v=0$;
       
@@ -50,12 +50,12 @@
 
     + **谱峰分析**：
         - **<font color="#2894FF">谱峰强度</font>** 反映了物质浓度，分子取向（偏振）；**<font color="#2894FF">谱峰位置</font>** 反映了官能团，化学结构，还可以进行化学计量学分析；**<font color="#2894FF">谱峰位移</font>** 反映了物质的应力/应变，变形，压力，温度；**<font color="#2894FF">谱峰比值</font>** 反映了物质的相对浓度；**<font color="#2894FF">偏振</font>** 反映分子取向；**<font color="#2894FF">谱峰的半高宽</font>** 反映物质的结晶度，缺陷，掺杂。
-                <div align=center><img src="picture/拉曼光谱图谱峰分析.webp" alt="No Picture" style="zoom:70%"/><center><p>拉曼光谱图谱峰分析</p></center></div>
+                <div align=center><img src="picture/拉曼光谱图谱峰分析.webp" alt="No Picture" style="zoom:70%"/><center><p>图2 拉曼光谱图谱峰分析</p></center></div>
         
         + **退偏度(depolarization ratio)**： 分子通常有特定的空间取向，因此对某一分子而言，入射光为偏振光引起的拉曼散射光也是偏振光，但其偏振方向不一定一致。而对于一个多分子体系，各个分子的空间取向不同且呈无规分布，因此即使入射的是平面偏振光，整体散射光却是非完全偏振的，这一现象称为**退偏**。
             
-            - 在入射激光的垂直与平行方向放置偏振器，分别测得散射光强，退偏度为$$\rho_p = \frac{I_\bot}{I_\parallel}$$
-                <div align=center><img src="picture/拉曼光谱退偏度测量.png" alt="No Picture" style="zoom:70%"/><center><p>拉曼光谱退偏度测量实验</p></center></div>
+            - 在入射激光的垂直与平行方向放置偏振器，分别测得散射光强，退偏度为$$\begin{align}\rho_p = \frac{I_\bot}{I_\parallel}\end{align}$$
+                <div align=center><img src="picture/拉曼光谱退偏度测量.png" alt="No Picture" style="zoom:70%"/><center><p>图3 拉曼光谱退偏度测量实验</p></center></div>
             
             - $\rho_p$值越小，分子振动对称性越高。当$\rho_p$几乎趋近于0时，为**全对称分子振动（各向同性）**；当$\rho_p$介于0到$\frac{3}{4}$之间，为**非对称分子振动（各向异性）**。
             
@@ -64,7 +64,7 @@
               + $459 \ \mathbf{{cm}^{-1}}$所对应的振动，$\rho_p \sim 0$，各向同性。
               
               + $314$和$218 \ \mathbf{{cm}^{-1}}$所对应的振动，$\rho_p$较大，为各向异性。    
-                <div align=center><img src="picture/四氯化碳拉曼偏振光谱.png" alt="No Picture" style="zoom:70%"/><center><p>四氯化碳拉曼偏振光谱</p></center></div>
+                <div align=center><img src="picture/四氯化碳拉曼偏振光谱.png" alt="No Picture" style="zoom:70%"/><center><p>图4 四氯化碳拉曼偏振光谱</p></center></div>
 
 * ***拉曼光谱图中高度和强度的区别？***
 
@@ -74,9 +74,9 @@
 
     + **用于计算信噪比的公式可能会对任何特定光谱数据集的表现灵敏度产生显著影响。**
 
-    + **FSD方法(First Standard Deviation Method)，第一标准方差法，也称为平方根(SQRT)方法**：科学家将SNR定义为峰值信号减去背景信号的差值，再除以背景信号的差值。$$\frac{S}{N} = \frac{S_{397\mathbf{nm}}-S_{450\mathbf{nm}}}{\sqrt{S_{450\mathbf{nm}}}}$$峰值信号在水拉曼光谱图的拉曼位移$397\mathbf{nm}$处（其从$350\mathbf{nm}$处激发），在没有拉曼信号的区域$450\mathbf{nm}$处测量噪声。对于一个完美的光学系统，在$450\mathbf{nm}$处没有信号，因为那里没有拉曼发射，然而，所有的光电系统都有一定程度的杂散光和噪声，这将导致在$450\mathbf{nm}$处产生信号。上述公式假设噪声受到泊松统计量控制，因此，可以计算为在$450\mathbf{nm}$处的基线信号计数的平方根。
+    + **FSD方法(First Standard Deviation Method)，第一标准方差法，也称为平方根(SQRT)方法**：科学家将SNR定义为峰值信号减去背景信号的差值，再除以背景信号的差值。$$\begin{align}\frac{S}{N} = \frac{S_{397\mathbf{nm}}-S_{450\mathbf{nm}}}{\sqrt{S_{450\mathbf{nm}}}}\end{align}$$峰值信号在水拉曼光谱图的拉曼位移$397\mathbf{nm}$处（其从$350\mathbf{nm}$处激发），在没有拉曼信号的区域$450\mathbf{nm}$处测量噪声。对于一个完美的光学系统，在$450\mathbf{nm}$处没有信号，因为那里没有拉曼发射，然而，所有的光电系统都有一定程度的杂散光和噪声，这将导致在$450\mathbf{nm}$处产生信号。上述公式假设噪声受到泊松统计量控制，因此，可以计算为在$450\mathbf{nm}$处的基线信号计数的平方根。
     
-    + **均方根法(RMS Method)**：另一种常用的方法时用峰值信号与背景信号的差值除于背景信号噪声的均方根（RMS）值。公式如下所示：$$\frac{S}{N}=\frac{S_{397\mathbf{nm}}- S_{450\mathbf{nm}}}{N_{rms, \ background}}$$$$N_rms = \sqrt{\frac{\sum_i^n(S_i-\bar{S})^2}{n}}$$其中基于时间的背景信号被测量$n$次，$S$是整个动力学扫描的平均强度值。
+    + **均方根法(RMS Method)**：另一种常用的方法时用峰值信号与背景信号的差值除于背景信号噪声的均方根（RMS）值。公式如下所示：$$\begin{align}\frac{S}{N}=\frac{S_{397\mathbf{nm}}- S_{450\mathbf{nm}}}{N_{rms, \ background}}\end{align}$$$$\begin{align}N_{rms} = \sqrt{\frac{\sum_i^n(S_i-\bar{S})^2}{n}}\end{align}$$其中基于时间的背景信号被测量$n$次，$S$是整个动力学扫描的平均强度值。
 
 * ***为什么拉曼光谱图中会产生数据溢出的现象？***
 
@@ -90,7 +90,7 @@
         - 为了尽可能获得最好的光谱或图像，有必要通过最大化撞击CCD的光子来获得最多的信号。这个目标可以通过增加曝光时间，从而让每个像素收集更多的光子来实现。但是，如果光子数量超过某个像素点的像素井的容量。则测得的电子响应将变为非线性，并且光谱或图像在该位置变得饱和。本质上，每个像素都有一个饱和电荷水平，当达到饱和电荷水平时，多余的*光生电荷*会溢出到图像区域中最近的相邻孔中。这种效果通常被称为“高光溢出”或“过饱和”，CCD 检测器的结构使得这种高光溢出预计主要发生在与饱和像素相同的列中（垂直）。
         
         - 在没有正确滤镜的情况下拍摄太阳照片，可以看到过饱和现象，如下图所示
-          <div align=center><img src="picture/“高光溢出”的太阳图像.png" alt="No Picture" style="zoom:100%"/><center><p>“过饱和”的太阳图像</p></center></div>
+          <div align=center><img src="picture/“高光溢出”的太阳图像.png" alt="No Picture" style="zoom:100%"/><center><p>图5 “过饱和”的太阳图像</p></center></div>
           上图展示了太阳本身的光晕。结果，太阳图像区域中的光子溢出该区域的井，并通过CCD井垂直传输，从而在图像中看到亮线。
           
           当光谱仪中的 CCD 检测器过饱和时，也会出现同样的现象。当曝光对于检测器的饱和电荷水平来说太高时，该区域的光谱变得饱和，并且可以在光谱图像中看到光晕。
