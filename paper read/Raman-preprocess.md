@@ -122,5 +122,239 @@
 
           + 如果要收集超过65535个光子，提供了“Corrent Overflow”功能，测量的时候在每次溢出的时候传输到PC内存，并添加到已经存在的数据中。然后清除测量数据存储器并重新开始测量。当收集时间结束的时候，将结果除以溢出数，并将其写回测量存储器。
 
-* ***拉曼光谱去噪算法？***
-  + Savitzky-Golay平滑
+* ***拉曼光谱预处理算法？***
+  
+  + 基线校正（Baseline Correction）：基线校正是预处理中最常见的步骤之一，目的是消除样品或仪器的基线偏移。常用的基线校正方法包括多项式拟合、基于小波变换的方法等。
+    
+    - 多项式拟合法（Polynomial Fitting）：该方法通过拟合拉曼光谱信号的多项式来估计基线，并将其从原始光谱信号中减去。多项式拟合的阶数通常由用户根据实际情况进行选择。
+  
+      + 在Matlab中，可以使用polyfit函数对拉曼光谱数据进行多项式拟合，并实现基线校正。polyfit函数的使用方法如下：
+      ```
+      % x为自变量，y为因变量，n为多项式阶数
+      p = polyfit(x, y, n);
+      % p为拟合得到的多项式系数，使用polyval函数计算拟合曲线
+      y_fit = polyval(p, x);
+      % 对原始光谱数据进行基线校正
+      y_baseline_corrected = y - y_fit;
+
+      ```
+
+      + 其中，`polyfit`函数通过拟合数据的多项式系数来估计光谱的基线，`polyval`函数用于计算拟合得到的多项式曲线，最终的基线校正通过将拟合得到的曲线从原始光谱数据中减去来实现。
+
+      + 需要注意的是，多项式的阶数需要根据实际数据情况进行选择，阶数太低会导致基线拟合不准确，而阶数太高会导致过拟合和噪声引入。通常建议选择3-5阶的多项式进行拟合。
+
+      + 下面是一个简单的示例代码，以3阶多项式拟合为例：
+      ```
+      % 读取拉曼光谱数据
+      data = load('raman_spectrum.dat');
+      x = data(:,1); % 波数
+      y = data(:,2); % 强度
+
+      % 进行多项式拟合
+      n = 3; % 多项式阶数
+      p = polyfit(x, y, n);
+      y_fit = polyval(p, x);
+
+      % 基线校正
+      y_baseline_corrected = y - y_fit;
+
+      % 绘制结果
+      plot(x, y);
+      hold on;
+      plot(x, y_fit, 'r--');
+      plot(x, y_baseline_corrected, 'g');
+      legend('原始光谱', '拟合基线', '基线校正后光谱');
+      xlabel('波数 (cm^{-1})');
+      ylabel('强度');
+      ```
+    - 最小二乘法（Least-Squares）：该方法通过最小化原始拉曼光谱与拟合基线之间的误差来估计基线。这种方法可以在多项式拟合的基础上进一步优化基线估计效果。
+      
+      + 基线校正的最小二乘法是一种常用的基线校正方法，可以通过求解一个最小二乘问题来拟合光谱的基线。在Matlab中，可以使用`lsqcurvefit`函数来实现最小二乘法基线校正。具体实现方法如下：
+      ```
+      % 读取拉曼光谱数据
+      data = load('raman_spectrum.dat');
+      x = data(:,1); % 波数
+      y = data(:,2); % 强度
+
+      % 定义拟合函数
+      f = @(p, x) polyval(p, x);
+
+      % 初始参数猜测，可以设置为一个3阶多项式的系数
+      p0 = polyfit(x, y, 3);
+
+      % 进行最小二乘拟合
+      p = lsqcurvefit(f, p0, x, y);
+
+      % 计算拟合曲线
+      y_fit = polyval(p, x);
+
+      % 基线校正
+      y_baseline_corrected = y - y_fit;
+
+      % 绘制结果
+      plot(x, y);
+      hold on;
+      plot(x, y_fit, 'r--');
+      plot(x, y_baseline_corrected, 'g');
+      legend('原始光谱', '拟合基线', '基线校正后光谱');
+      xlabel('波数 (cm^{-1})');
+      ylabel('强度');
+      ```
+
+      + 其中，`lsqcurvefit`函数用于求解最小二乘问题，第一个参数为拟合函数，第二个参数为初始参数猜测，第三个和第四个参数分别为自变量和因变量。需要注意的是，初始参数猜测需要根据实际数据情况进行选择，不同的初始猜测可能会导致最终结果不同。通常建议将初始猜测设置为一个3阶多项式的系数。另外，`polyval`函数用于计算拟合得到的多项式曲线，最终的基线校正通过将拟合得到的曲线从原始光谱数据中减去来实现。
+
+    - 索贝列夫滤波法（Savitzky-Golay Filter）：该方法是一种数字信号处理中常用的平滑滤波技术。索贝列夫滤波法可以通过一系列滑动窗口来拟合光谱信号，从而估计基线并减去。
+     + Savitzky-Golay滤波法是一种常用的基线校正方法，可以通过对光谱数据进行滑动窗口平滑处理来估计光谱的基线。在Matlab中，可以使用`sgolayfilt`函数来实现Savitzky-Golay滤波法的基线校正。具体实现方法如下：
+      ```
+      % 读取拉曼光谱数据
+      data = load('raman_spectrum.dat');
+      x = data(:,1); % 波数
+      y = data(:,2); % 强度
+
+      % 滤波器的窗口大小和多项式阶数，需要根据实际情况进行选择
+      window_size = 21;
+      poly_order = 3;
+
+      % 进行Savitzky-Golay滤波
+      y_baseline = sgolayfilt(y, poly_order, window_size);
+
+      % 基线校正
+      y_baseline_corrected = y - y_baseline;
+
+      % 绘制结果
+      plot(x, y);
+      hold on;
+      plot(x, y_baseline, 'r--');
+      plot(x, y_baseline_corrected, 'g');
+      legend('原始光谱', '滤波后基线', '基线校正后光谱');
+      xlabel('波数 (cm^{-1})');
+      ylabel('强度');
+
+      ```
+     + 其中，`sgolayfilt`函数用于对光谱数据进行Savitzky-Golay滤波，第一个参数为待滤波的数据，第二个参数为滤波器的多项式阶数，第三个参数为滤波器的窗口大小。需要注意的是，滤波器的窗口大小和多项式阶数需要根据实际情况进行选择，不同的参数选择可能会导致最终结果不同。通常建议选择一个合适的窗口大小和多项式阶数，以达到较好的基线校正效果。另外，基线校正通过将滤波得到的基线从原始光谱数据中减去来实现。
+
+    - 傅里叶变换法（Fourier Transform）：该方法将拉曼光谱信号转换到频域，通过选择低频成分来估计基线。该方法对于复杂光谱信号的处理效果较好。
+     
+     + 基于傅里叶变换的基线校正方法可以通过去除光谱数据中低频部分的信号来实现。在Matlab中，可以使用`fft`函数来实现傅里叶变换，从而实现基线校正。具体实现方法如下：
+      ```
+      % 读取拉曼光谱数据
+      data = load('raman_spectrum.dat');
+      x = data(:,1); % 波数
+      y = data(:,2); % 强度
+
+      % 进行傅里叶变换
+      y_fft = fft(y);
+      n = length(y);
+      f = (0:n-1)*(1/(x(2)-x(1)))/n; % 傅里叶变换的频率
+
+      % 滤除低频信号，只保留高频信号
+      f_cutoff = 500; % 低频信号的截止频率
+      y_fft(f<f_cutoff) = 0;
+
+      % 进行逆傅里叶变换，得到基线校正后的光谱
+      y_baseline_corrected = real(ifft(y_fft));
+
+      % 绘制结果
+      plot(x, y);
+      hold on;
+      plot(x, y_baseline_corrected, 'r');
+      legend('原始光谱', '基线校正后光谱');
+      xlabel('波数 (cm^{-1})');
+      ylabel('强度');\
+      ```
+      + 其中，fft函数用于对光谱数据进行傅里叶变换，`ifft`函数用于进行逆傅里叶变换，从而得到基线校正后的光谱。在进行傅里叶变换之前，需要根据实际情况选择低频信号的截止频率。截止频率越高，则保留的高频信号就越多，滤除的低频信号就越少，基线校正效果就越好。但是，如果截止频率设置过高，可能会将光谱中的一些有用信息滤除掉，因此需要根据实际情况进行选择。
+
+    - 小波变换法（Wavelet Transform）：该方法通过多尺度分解将光谱信号分解为不同的频带，并通过选择适当的频带来估计基线。该方法可以有效地去除光谱信号中的高频噪声和干扰。
+
+      + 小波变换是一种基于信号局部特征的变换方法，可以用于信号的去噪、压缩和基线校正等应用。在基线校正中，小波变换可以通过将光谱信号分解为低频和高频部分，从而去除基线信号中的低频部分，达到基线校正的目的。在Matlab中，可以使用wdenoise函数实现小波变换的基线校正。具体实现方法如下：
+      ```
+      % 读取拉曼光谱数据
+      data = load('raman_spectrum.dat');
+      x = data(:,1); % 波数
+      y = data(:,2); % 强度
+
+      % 进行小波变换
+      wname = 'db4'; % 小波基函数
+      level = 5; % 分解层数
+      [coeff, l] = wavedec(y, level, wname);
+
+      % 提取低频部分
+      a5 = wrcoef('a', coeff, l, wname, 5);
+      a4 = wrcoef('a', coeff, l, wname, 4);
+      a3 = wrcoef('a', coeff, l, wname, 3);
+      a2 = wrcoef('a', coeff, l, wname, 2);
+      a1 = wrcoef('a', coeff, l, wname, 1);
+
+      % 对低频部分进行平滑
+      a1_smooth = smooth(a1);
+
+      % 重构信号
+      coeff(1:length(a1)) = a1_smooth;
+      y_baseline_corrected = waverec(coeff, l, wname);
+
+      % 绘制结果
+      plot(x, y);
+      hold on;
+      plot(x, y_baseline_corrected, 'r');
+      legend('原始光谱', '基线校正后光谱');
+      xlabel('波数 (cm^{-1})');
+      ylabel('强度');
+      ```
+      + 其中，`wavedec`函数用于对光谱数据进行小波分解，`wrcoef`函数用于提取低频部分，`smooth`函数用于对低频部分进行平滑，`waverec`函数用于重构信号，从而得到基线校正后的光谱。
+
+     + 在进行小波分解之前，需要根据实际情况选择小波基函数和分解层数。选择不同的小波基函数和分解层数，可能会对基线校正效果产生不同的影响。需要根据实际情况进行选择。
+  
+  + 噪声过滤（Noise Reduction）：拉曼光谱数据中通常会存在一些噪声，如荧光、仪器噪声等。噪声过滤的目的是去除这些噪声，以便更好地分析拉曼光谱信号。 常用的噪声过滤方法包括小波去噪、谱间差异法等。
+    
+    -  小波去噪是基于小波变换的一种信号去噪方法，可以在基线校正中用于过滤光谱信号中的噪声。在Matlab中，可以使用wdenoise函数实现小波去噪。具体实现方法如下：
+    ```
+    % 读取拉曼光谱数据
+    data = load('raman_spectrum.dat');
+    x = data(:,1); % 波数
+    y = data(:,2); % 强度
+
+    % 对光谱信号进行小波去噪
+    wname = 'db4'; % 小波基函数
+    level = 5; % 分解层数
+    y_denoised = wdenoise(y, level, 'Wavelet', wname);
+
+    % 绘制结果
+    plot(x, y);
+    hold on;
+    plot(x, y_denoised, 'r');
+    legend('原始光谱', '去噪后光谱');
+    xlabel('波数 (cm^{-1})');
+    ylabel('强度');
+    ```
+    
+    其中，`wdenoise`函数用于对光谱信号进行小波去噪，level参数表示小波分解的层数，`wname`参数表示选择的小波基函数。去噪后的光谱信号可以通过`y_denoised`变量获得。需要注意的是，选择不同的小波基函数和分解层数，可能会对去噪效果产生不同的影响。需要根据实际情况进行选择。
+
+    - 谱间差异法（SNIP）是一种基于峰与谷的信号分解算法，可以用于拉曼光谱中的基线校正和噪声过滤。在Matlab中，可以使用snip函数实现SNIP算法。具体实现方法如下：
+    ```
+    % 读取拉曼光谱数据
+    data = load('raman_spectrum.dat');
+    x = data(:,1); % 波数
+    y = data(:,2); % 强度
+
+    % 对光谱信号进行SNIP噪声过滤
+    niter = 10; % 迭代次数
+    y_filtered = snip(y, niter);
+
+    % 绘制结果
+    plot(x, y);
+    hold on;
+    plot(x, y_filtered, 'r');
+    legend('原始光谱', 'SNIP噪声过滤后光谱');
+    xlabel('波数 (cm^{-1})');
+    ylabel('强度');
+    ```
+
+    其中，`snip`函数用于对光谱信号进行SNIP噪声过滤，`niter`参数表示迭代次数。噪声过滤后的光谱信号可以通过`y_filtered`变量获得。需要注意的是，SNIP算法在实际应用中可能需要根据不同的光谱数据进行调整，以获得最佳的噪声过滤效果。
+
+
+  + 数据标准化（Data Normalization）：数据标准化是将拉曼光谱数据缩放到相同的尺度或范围，以便进行比较和分析。 常用的数据标准化方法包括标准正态分布、最小-最大规范化等。
+  
+  + 偏差校正（Spectral Residual Correction）：偏差校正是校正拉曼光谱数据中的非线性光谱响应，以便更准确地分析光谱信号。常用的偏差校正方法包括二次多项式拟合、B-Spline插值等。
+
+  + 特征提取（Feature Extraction）：特征提取是从拉曼光谱数据中提取有用信息的过程，以便更好地区分不同样品之间的差异。 常用的特征提取方法包括主成分分析（PCA）、独立成分分析（ICA）等。
+  
