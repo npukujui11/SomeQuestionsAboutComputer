@@ -69,6 +69,7 @@ links-as-notes: true
 
     <div align=center><img src="picture/去模糊算法分类.png" alt="No Picture" style="zoom:70%"/><center><p>Figure 1 去模糊算法分类</p></right></div>
 
+##### 按方法分类
 
 * 传统方法：从20世纪60年代开始，去模糊方法是基于频域滤波的方法，比如退化函数的逆滤波 @yamada_image_2006 和维纳滤波等。这些方法虽然可以较好地还原一些简单的模糊情况，但在复杂的模糊场景下效果不佳，因为基于频域的图像去模糊算法需要准确的知道模糊的退化类型 @li_survey_2022 。因此提出了一些基于空间域的图像去模糊从估计算法，常见的基于空间域的估计算法有：差分恢复算法、最小二乘法、最大熵算法等等。
     + 早期研究的一些方法大多基于跟随模糊模型(Following blur model)，如figure 2所示：$$\mathbf{B} = \mathbf{K}\mathbf{S} + \mathbf{n}$$
@@ -112,20 +113,35 @@ links-as-notes: true
         
       + 去噪网络是一类用于降低图像噪声的深度学习模型，它们的主要目标是从带噪声的图像中恢复出原始图像，使其更加清晰和可识别。去噪网络一般可以分为*基于降噪自编码器*和*基于卷积神经网络*两种类型。
     
-      + **伪逆内核**：假设线性模糊模型为：$y=x*k$；空间卷积可以转化为频域乘法：$\mathcal{F(y)}=\mathcal{F(x)} \cdot \mathcal{F(k)}$. 其中$F(\cdot)$表示离散傅里叶变换`(DFT)`，操作符$\cdot$是元素相乘。在傅里叶域中，$x$可以表示为：$$x=\mathcal{F}^{-1}(\frac{\mathcal{F}(y)} {\mathcal{F}(k)}=\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)})*y$$其中，$\mathcal{F}^{-1}$为逆离散傅里叶变换。$x$的解写成一种空间卷积，核为$\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)})$，内核实际上是一个在没有紧支柱的情况下跨越整个空间域的重复信号。当噪声出现时，通常使用正则化项来避免频域中除数为零，使得伪逆在空间域中快速衰减。
-      经典的维纳反卷积相当于使用`Tikhonov`正则化矩阵。维纳反卷积如下：$$x=\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)} {\frac{|\mathcal{F}(k)|^{2}}{\mathcal{F}(k)|^{2}+\frac{1}{SNR}}})*y=k^{\dag}*y$$.$SNR$为信噪比，$k^\dag$为伪逆核$k^\dag$且$SNR=1E-4$
+      + **伪逆内核**：假设线性模糊模型为：$y=x \otimes k$；空间卷积可以转化为频域乘法：$\mathcal{F(y)}=\mathcal{F(x)} \cdot \mathcal{F(k)}$. 其中$F(\cdot)$表示离散傅里叶变换`(DFT)`，操作符$\cdot$是元素相乘。在傅里叶域中，$x$可以表示为：$$x=\mathcal{F}^{-1}(\frac{\mathcal{F}(y)} {\mathcal{F}(k)}=\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)}) \otimes y$$其中，$\mathcal{F}^{-1}$为逆离散傅里叶变换。$x$的解写成一种空间卷积，核为$\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)})$，内核实际上是一个在没有紧支柱的情况下跨越整个空间域的重复信号。当噪声出现时，通常使用正则化项来避免频域中除数为零，使得伪逆在空间域中快速衰减。
+      经典的维纳反卷积相当于使用`Tikhonov`正则化矩阵。维纳反卷积如下：$$x=\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)} {\frac{|\mathcal{F}(k)|^{2}}{\mathcal{F}(k)|^{2}+\frac{1}{SNR}}}) \otimes y=k^{\mathcal{T}} \otimes y$$ $SNR$为信噪比，$k^\mathcal{T}$为伪逆核$k^\mathcal{T}$且$SNR=1E-4$
 
-      + $SNR$为信噪比，$k^\dag$为伪逆核，噪声越大，$\frac{1}{SNR}$就越大。下图(a)显示了一个半径为7的磁盘模糊核，通常用于焦模糊模型。下图(b)是伪逆核$k^\dag$且$SNR=1E-4$，一张使用此模糊核的图像如图(c)，$k^\dag$结合反卷积的结果如图(d)。这种方法可以去掉一部分图像中的模糊，但是噪声和饱和会引起视觉伪影，这与我们对维纳反卷积的理解是一致的。总结来说，使用深度卷积网络来做图像反卷积其实并不简单，增加卷积核来简单地修改网络结构会导致训练难度增加，我们采用一种新的结构来改进网络，结果如图(e)。<div align=center><img src="picture/Pseudo inverse kernel and dedconvolution examples.png" alt="No Picture" style="zoom:70%"/><center><p>Figure 6 Pseudo inverse kernel and dedconvolution examples</p></right></div>
+      + $SNR$为信噪比，$k^\mathcal{T}$为伪逆核，噪声越大，$\frac{1}{SNR}$就越大。下图(a)显示了一个半径为7的磁盘模糊核，通常用于焦模糊模型。下图(b)是伪逆核$k^\mathcal{T}$且$SNR=1E-4$，一张使用此模糊核的图像如图(c)，$k^\mathcal{T}$结合反卷积的结果如图(d)。这种方法可以去掉一部分图像中的模糊，但是噪声和饱和会引起视觉伪影，这与我们对维纳反卷积的理解是一致的。总结来说，使用深度卷积网络来做图像反卷积其实并不简单，增加卷积核来简单地修改网络结构会导致训练难度增加，我们采用一种新的结构来改进网络，结果如图(e)。<div align=center><img src="picture/Pseudo inverse kernel and dedconvolution examples.png" alt="No Picture" style="zoom:70%"/><center><p>Figure 6 Pseudo inverse kernel and dedconvolution examples</p></right></div>
 
       + 可分离卷积核性的网络结构，即使用可分离卷积核来表示卷积核，及将一个二维卷积核分解为两个一维卷积核的乘积的形式，或者是把二维卷积看成是一维滤波器的加权和，即$h(x,y)=f(x)g(y)$，这种分解方法可以使卷积操作的计算量大大降低，同时也能减少参数数量。然后使用逐通道卷积`(Pointwise Convolution)`对通道之间的信息进行交互，以达到与标准卷积类似的效果，但参数数量和计算复杂度都大大降低。
       
-      + 核可分性是通过奇异值分解（SVD）来实现的，给定伪逆核$k^{\dag}$，可以分解为$k^{\dag}=USV \ \ T$，用$u_j$、$u_j$分别表示$U$和$V$的第$j$列，$s_j$为第$j$个奇异值，原始的伪反卷积可以表示为：$$k^{\dag}*y=\sum_j s_j \cdot u_j * (v_j^{T}*y)$$
+      + 核可分性是通过奇异值分解（SVD）来实现的，给定伪逆核$k^{\mathcal{T}}$，可以分解为$k^{\mathcal{T}}=USV \ \ T$，用$u_j$、$u_j$分别表示$U$和$V$的第$j$列，$s_j$为第$j$个奇异值，原始的伪反卷积可以表示为：$$k^{\mathcal{T}}*y=\sum_j s_j \cdot u_j * (v_j^{T}*y)$$
       
     + 
 
 * 总之，图像去模糊方法的发展经历了从经典方法到基于`PDE`的方法，再到基于统计学习和深度学习的方法的演进过程，未来还会继续探索更加高效、准确的图像去模糊方法。
 
+##### 按照模糊核分类
+
+* **非盲去模糊**`(Non-Blind Deblurring)`
+    + 如果有了模糊核$\mathbf{K}$，被称为非盲目去模糊，即使有了模糊核，由于传感器的噪声和高频信息的损失，这个任务也具有挑战性。一些非深度方法采用自然图像先验，例如全局或局部先验，或在空间域或在频率域。为了克服不希望出现的环形伪影，空间去卷积和深度神经网络被结合起来。有方法处理饱和区域，去除由图像噪声引起的不需要的伪影。
+    
+    + 下表中总结了现有的基于非盲的深度学习方法。这些方法可以大致分为两组:第一组使用反卷积，然后去噪，而第二组直接使用深度网络。<div align=center><img src="picture/非盲去模糊方法概述.jpg" alt="No Picture" style="zoom:70%"/><center><p>Table 1 Overview of deep single image non-blind deblurring methods</p></right></div>
+      + **去噪反卷积**`Deconvolution with Denoising`：
+      + **反卷积的学习先验**`Learning priors for deconvolution`
+
+* **盲去模糊**`Blind Deblurring`
+
 #### 评估方式
+
+* **完全参考指标**`(Full-Reference Metrics)`通过比较修复后的图像和地面实况`(GT)`来评估图像质量，例如`PSNR`@hore2010image 、`SSIM`@wang2004image、`WSNR`、`MS-SSIM`、`IFC`、`NQM`、`UIQI`、`VIF`和`LPIPS`。其中`RSNR`和`SSIM`是图像修复任务中最常使用的指标。此外，LPIPS和E-LPIPS能准确预测人类对图像质量的判断。
+
+* **非参考指标**`(No-Reference Metrics)`只使用去模糊的图像来衡量质量，例如`BIQI`、`BLINDS2`、`BRISQUE`、`CORNIA`、`DIIVINE`、`NIQE`和`SSEQ`。此外，通过比较对不同视觉任务(如物体检测和识别)准确性的影响，已经开发了一些指标来评估图像去模糊算法的性能
 
 #### 数据集
 
