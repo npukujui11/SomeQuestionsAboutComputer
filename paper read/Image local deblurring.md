@@ -133,7 +133,12 @@ links-as-notes: true
     
     + 下表中总结了现有的基于非盲的深度学习方法。这些方法可以大致分为两组:第一组使用反卷积，然后去噪，而第二组直接使用深度网络。<div align=center><img src="picture/非盲去模糊方法概述.jpg" alt="No Picture" style="zoom:70%"/><center><p>Table 1 Overview of deep single image non-blind deblurring methods</p></right></div>
       + **去噪反卷积**`Deconvolution with Denoising`：
-      + **反卷积的学习先验**`Learning priors for deconvolution`
+        + Xu等人 @xu_deep_2014 使用`DCNN`去模糊包含异常值的图像。该算法将奇异值分解应用于模糊核，并将传统的基于优化的方案与`CNN`联系起来。但是，模型需要针对不同的模糊核进行重新训练。利用伪逆核 @xu_deep_2014 的低秩特性，Ren等人 @NEURIPS2018_0aa1883c 提出了一种广义深度CNN——广义低秩逼近 `Generalized Low Rank Approximations`,`GLRA`，在统一框架中处理任意模糊核，而无需对每个核进行重新训练。然而，模糊内核的低秩分解会导致性能下降。
+        + 这两种方法 @xu_deep_2014, @NEURIPS2018_0aa1883c 分别将反卷积CNN和去噪CNN连接起来以去除模糊和噪声。然而，这种去噪网络被设计用来去除加性高斯白噪声，不能处理模糊图像中的异常值或饱和像素。此外，这些非盲去模糊网络需要针对固定的噪声水平进行训练，以获得良好的性能，这限制了它们在一般情况下的使用。
+        + Kruse等 @kruse_learning_2017 通过展开迭代方案提出了一个傅立叶反卷积网络`(FDN)`，其中每个阶段包含一个基于`FFT`的反卷积模块和一个基于`CNN`的去噪器。综合多个噪声级别的数据进行训练，获得更好的去模糊和去噪性能。
+      
+      + **反卷积的学习先验**`Learning priors for deconvolution`：
+        + Bigdeli等 @DBLP:journals/corr/abs-1709-03749 学习了表示自然图像分布的平滑版本的均值漂移向量场，并使用梯度下降来最小化非盲去模糊的贝叶斯风险。Jin等 @jin_noise-blind_2017 使用贝叶斯估计器同时估计噪声水平和消除模糊。他们还提出了一个网络(GradNet)来加速去模糊过程。与学习固定图像先验相比，GradNet可以集成不同的先验，并改进现有的基于map的去模糊算法。Zhang等人 @zhang_learning_2017 训练了一组判别去噪器，并将其集成到基于模型的优化框架中，以解决非盲去模糊问题。如果没有异常值处理，即使在估计的内核是准确的情况下，非盲去模糊方法也会产生振铃工件。注意，非盲去模糊任务可以采用一些超分辨率方法(尺度因子为1)，与图像重建任务的公式非常相似，例如USRNet @zhang_deep_2020 。
 
 * **盲去模糊**`Blind Deblurring`
 
