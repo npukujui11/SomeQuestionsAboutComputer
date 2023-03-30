@@ -109,9 +109,15 @@ links-as-notes: true
   
   + **基于深度卷积神经网络的图像去模糊方法**`(Deep Convolutional Neural Network，DCNN)`
     
-    + 在非盲环境下对模糊图像进行去模糊，通过建立一个基于可分离核属性的网络，即(逆)模糊核可以分解成少量的有效滤波器。此外，还可以加入去噪网络 @eigen_restoring_2013 ，通过将模块连接到网络的末端来减少噪声和颜色饱和度等视觉伪影 @xu_deep_2014 。
+    + 在非盲环境下对模糊图像进行去模糊，通过建立一个基于可分离核属性的网络，即(逆)模糊核可以分解成少量的有效滤波器。此外，还可以加入去噪模块 @eigen_restoring_2013 ，通过将模块连接到网络的末端来减少噪声和颜色饱和度等视觉伪影 @xu_deep_2014 。
+
+      + 在图像去模糊领域中，去噪网络或者说去噪模块是指用于消除图像中的噪声的网络或模块。它们可以通过各种方法来实现，例如滤波器方法和深度学习方法。
+
+      + **去噪网络**：去噪网络是一种用于消除图像中的噪声的深度学习网络。它们通过学习大量带有噪声和无噪声图像对来训练，以便能够从带有噪声的图像中恢复出清晰的图像。这些网络通常包括多个卷积层和非线性激活函数，以及其他组件，如批量归一化层和池化层。它们可以处理各种类型的噪声，包括高斯噪声、椒盐噪声和泊松噪声等。去噪网络一般可以分为*基于降噪自编码器*和*基于卷积神经网络*两种类型。
+
+        + `MLP(Multilayer Perceptron)`是多层感知机，也叫人工神经网络`(Artificial Neural Network)`。除了输入输出层，它中间可以有多个隐层。最简单的`MLP`只含一个隐层，即三层的结构。多层感知机层与层之间是全连接的。
         
-      + 去噪网络是一类用于降低图像噪声的深度学习模型，它们的主要目标是从带噪声的图像中恢复出原始图像，使其更加清晰和可识别。去噪网络一般可以分为*基于降噪自编码器*和*基于卷积神经网络*两种类型。
+        + <div align=center><img src="picture/MLP去噪网络.png" alt="No Picture" style="zoom:70%"/><center><p>Figure 6 Pseudo inverse kernel and dedconvolution examples</p></right></div>
     
       + **伪逆内核**：假设线性模糊模型为：$y=x \otimes k$；空间卷积可以转化为频域乘法：$\mathcal{F(y)}=\mathcal{F(x)} \cdot \mathcal{F(k)}$. 其中$F(\cdot)$表示离散傅里叶变换`(DFT)`，操作符$\cdot$是元素相乘。在傅里叶域中，$x$可以表示为：$$x=\mathcal{F}^{-1}(\frac{\mathcal{F}(y)} {\mathcal{F}(k)}=\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)}) \otimes y$$其中，$\mathcal{F}^{-1}$为逆离散傅里叶变换。$x$的解写成一种空间卷积，核为$\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)})$，内核实际上是一个在没有紧支柱的情况下跨越整个空间域的重复信号。当噪声出现时，通常使用正则化项来避免频域中除数为零，使得伪逆在空间域中快速衰减。
       经典的维纳反卷积相当于使用`Tikhonov`正则化矩阵。维纳反卷积如下：$$x=\mathcal{F}^{-1}(\frac{1}{\mathcal{F}(k)} {\frac{|\mathcal{F}(k)|^{2}}{\mathcal{F}(k)|^{2}+\frac{1}{SNR}}}) \otimes y=k^{\mathcal{T}} \otimes y$$ $SNR$为信噪比，$k^\mathcal{T}$为伪逆核$k^\mathcal{T}$且$SNR=1E-4$
@@ -121,8 +127,6 @@ links-as-notes: true
       + 可分离卷积核性的网络结构，即使用可分离卷积核来表示卷积核，及将一个二维卷积核分解为两个一维卷积核的乘积的形式，或者是把二维卷积看成是一维滤波器的加权和，即$h(x,y)=f(x)g(y)$，这种分解方法可以使卷积操作的计算量大大降低，同时也能减少参数数量。然后使用逐通道卷积`(Pointwise Convolution)`对通道之间的信息进行交互，以达到与标准卷积类似的效果，但参数数量和计算复杂度都大大降低。
       
       + 核可分性是通过奇异值分解（SVD）来实现的，给定伪逆核$k^{\mathcal{T}}$，可以分解为$k^{\mathcal{T}}=USV \ \ T$，用$u_j$、$u_j$分别表示$U$和$V$的第$j$列，$s_j$为第$j$个奇异值，原始的伪反卷积可以表示为：$$k^{\mathcal{T}}*y=\sum_j s_j \cdot u_j * (v_j^{T}*y)$$
-      
-    + 
 
 * 总之，图像去模糊方法的发展经历了从经典方法到基于`PDE`的方法，再到基于统计学习和深度学习的方法的演进过程，未来还会继续探索更加高效、准确的图像去模糊方法。
 
@@ -182,7 +186,7 @@ links-as-notes: true
     
     + 深度自动编码器首先提取图像特征，然后解码器根据这些特征重建图像。对于单幅图像的去模糊，很多方法都采用了`U-Net`结构，如Figure 3所示。
       
-      -  <div align=center><img src="picture/DAE中的U-Net结构.png" alt="No Picture" style="zoom:70%"/><center><p>Figure 3 Deep single image deblurring network base on the Deep Auto-Encoder(DAE) architecture</p></right></div>
+      -  <div align=center><img src="picture/DAE中的U-Net结构.png" alt="No Picture" style="zoom:70%"/><center><p>Figure 4 Deep single image deblurring network base on the Deep Auto-Encoder(DAE) architecture</p></right></div>
     
     + 在某些情况下，额外的网络有助于利用额外的信息来指导`U-Net`。例如，Shen等人提出了一个人脸解析/分割网络来预测人脸标签作为先验，并将模糊图像和预测的语义标签作为输入到`U-Net`。其他方法应用多个`U-Net`以获得更好的性能。Tao等人分析了不同的`U-Net`以及`DAE`，并提出了一个尺度循环网络来处理模糊图像。第一个`U-Net`获得粗略的去模糊图像，然后将它们输入到另一个`U-Net`中以获得最终结果。该工作结合了这两种思想，使用去模糊网络获得粗略的去模糊图像，然后将它们输入到人脸解析网络中以生成语义标签。最后，将粗略的去模糊图像和标签都输入到`U-Net`中以获得最终的去模糊图像。
 
